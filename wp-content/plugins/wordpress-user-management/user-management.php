@@ -30,7 +30,7 @@
 class easy_user_management {
 
     // Add our filters
-    function easy_user_management() {
+    function user_management() {
         add_filter('easy_editable_roles', array( &$this, 'easy_editable_roles' ));
         add_filter('map_meta_cap', array( &$this, 'map_meta_cap' ), 10, 4);
 
