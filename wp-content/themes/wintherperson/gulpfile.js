@@ -196,6 +196,14 @@ gulp.task('scripts', ['jshint'], function() {
   });
   return merged
     .pipe(writeToManifest('scripts'));
+
+});
+
+
+gulp.task('concatscripts', function() {
+  return gulp.src([path.dist +'scripts/bootstrap.js', path.dist +'scripts/customizer.js', path.dist +'scripts/jquery.js',  path.dist +'scripts/main.js'])
+    .pipe(concat({ path: 'main-js.js'}))
+    .pipe(gulp.dest(path.dist +'scripts'));
 });
 
 // ### Fonts
@@ -264,6 +272,7 @@ gulp.task('watch', function() {
 gulp.task('build', function(callback) {
   runSequence('styles',
               'scripts',
+              'concatscripts',
               ['fonts', 'images'],
               callback);
 });

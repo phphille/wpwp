@@ -57,7 +57,7 @@ function my_enqueue($hook) {
           'jquery-ui-datepicker',
           'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/pepper-grinder/jquery-ui.min.css'
       );
-      wp_enqueue_style( 'jquery-ui-datepicker' );
+  wp_enqueue_style( 'jquery-ui-datepicker' );
   wp_enqueue_script( 'datepicker',  '/wp-content/themes/wintherperson/assets/scripts/admin-scripts/admin.js', wp_enqueue_script('jquery-ui-datepicker') );
 }
 add_action( 'admin_enqueue_scripts', 'my_enqueue' );

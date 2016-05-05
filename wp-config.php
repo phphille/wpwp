@@ -20,24 +20,6 @@
 
 // ** MySQL-inställningar - MySQL-uppgifter får du från ditt webbhotell ** //
 
-// /** Namnet på databasen du vill använda för WordPress */
-// define('DB_NAME', 'weinmer_com');
-//
-// /** MySQL-databasens användarnamn */
-// define('DB_USER', 'weinmer_com');
-//
-// /** MySQL-databasens lösenord */
-// define('DB_PASSWORD', 'yt2tZQpd');
-//
-// /** MySQL-server */
-// define('DB_HOST', 'weinmer.com.mysql');
-//
-// /** Teckenkodning för tabellerna i databasen. */
-// define('DB_CHARSET', 'utf8mb4');
-//
-// /** Kollationeringstyp för databasen. Ändra inte om du är osäker. */
-// define('DB_COLLATE', '');
-
 /** Namnet på databasen du vill använda för WordPress */
 define('DB_NAME', 'wpkorv');
 
