@@ -17,9 +17,16 @@ $sage_includes = [
   'lib/wrapper.php',   // Theme wrapper class
   'lib/customizer.php', // Theme customizer
   'lib/nav.php', //bootstrap nav
+  'lib/dashboard.php',
   'lib/userroles.php',
   'lib/userprofiles.php',
   'lib/postrequests.php',
+  'lib/custom-post-functions.php',
+  'lib/products.php',
+  'lib/companies.php',
+  'lib/lock-orders.php',
+  'lib/faq.php',
+  'lib/korvlador.php',
   'lib/phpexcel-1.8/classes/phpexcel.php'
 ];
 
@@ -41,3 +48,16 @@ function get_current_user_role() {
   $currentUser = new WP_User( get_current_user_id());
   return $currentUser->roles[0];
 }
+
+function my_enqueue($hook) {
+    // if ( 'edit.php' != $hook ) {
+    //     return;
+    // }
+  wp_register_style(
+          'jquery-ui-datepicker',
+          'http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/pepper-grinder/jquery-ui.min.css'
+      );
+      wp_enqueue_style( 'jquery-ui-datepicker' );
+  wp_enqueue_script( 'datepicker',  '/wp-content/themes/wintherperson/assets/scripts/admin-scripts/admin.js', wp_enqueue_script('jquery-ui-datepicker') );
+}
+add_action( 'admin_enqueue_scripts', 'my_enqueue' );

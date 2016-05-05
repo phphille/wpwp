@@ -56,7 +56,7 @@ $result = add_role( 'manager', 'Lagledare',array(
 
 $result = add_role( 'salesperson', 'Säljare',array(
     'read' => true,
-    'edit_posts' => false,
+    'edit_posts' => true,
     'create_posts' => false,
     'publish_posts' => false,
     'edit_pages' => false,

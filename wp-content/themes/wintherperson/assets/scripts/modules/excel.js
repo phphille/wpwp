@@ -5,26 +5,34 @@ var excel = {
   },
 
   uploadExcel: function() {
-    $j('.doUploadExcel').click(function(e) {
-      e.preventDefault();
-      var formData = new FormData($j('.doUploadExcel').parent()[0]);
-      $j.ajax({
-        url: '../api/excel/create_user_by_excel/', //Server script to process data
-        type: 'POST',
-        data: formData,
-        //Options to tell jQuery not to process data or worry about content-type.
-        cache: false,
-        contentType: false,
-        processData: false
-      })
-      .done(function(res){
-        console.log(res);
-      })
-      .fail(function(jqXHR, textStatus, errorThrown) {
-        console.log(jqXHR + '    ' + textStatus + '    ' + errorThrown);
-      });
-    });
+    if($j('.doUploadExcel').length > 0){
+      var self = this;
+      $j('.doUploadExcel').click(function(e) {
+        e.preventDefault();
 
+        self.getNonce('user', 'create_user')
+          .done(function(res) {
+            var formData = new FormData($j('.doUploadExcel').parent()[0]);
+            // formData.nonce = res.nonce;
+            $j.ajax({
+              url: '../api/excel/create_user_by_excel', //Server script to process data
+              type: 'POST',
+              data: formData,
+              //Options to tell jQuery not to process data or worry about content-type.
+              cache: false,
+              contentType: false,
+              processData: false,
+            })
+            .done(function(res){
+              console.log(res);
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+              console.log(jqXHR + '    ' + textStatus + '    ' + errorThrown);
+            });
+          });
+
+      });
+    }
     // $(':file').change(function(){
     //   var file = this.files[0];
     //   var name = file.name;

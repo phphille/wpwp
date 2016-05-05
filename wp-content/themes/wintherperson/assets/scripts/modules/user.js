@@ -5,6 +5,7 @@ var user = {
     this.updateUser();
     this.deleteUser();
     this.updateLoggedInUser();
+    this.updateSalesmansSales();
   },
 
   createUser: function() {
@@ -12,7 +13,7 @@ var user = {
       var self = this;
       $j('.doCreateUser').on('click', function(e){
         e.preventDefault();
-        self.postData($j(this).parent().serialize(), 'user', 'create_user');
+        self.postData($j(this).parent().serializeArray(), 'user', 'create_user');
       });
     }
   },
@@ -22,7 +23,7 @@ var user = {
       var self = this;
       $j('.doUpdateUser').on('click', function(e){
         e.preventDefault();
-        self.postData($j(this).parent().serialize(), 'user', 'update_user');
+        self.postData($j(this).parent().serializeArray(), 'user', 'update_user');
 
       });
     }
@@ -33,7 +34,7 @@ var user = {
       var self = this;
       $j('.doUpdateLoggedInUser').on('click', function(e){
         e.preventDefault();
-        self.postData($j(this).parent().serialize(), 'user', 'update_loggedin_user');
+        self.postData($j(this).parent().serializeArray(), 'user', 'update_loggedin_user');
 
       });
     }
@@ -44,7 +45,20 @@ var user = {
       var self = this;
       $j('.doDeleteUser').on('click', function(e){
         e.preventDefault();
-        self.postData($j(this).parent().serialize(), 'user', 'delete_user');
+        console.log($j(this).parent().serializeArray());
+        self.postData($j(this).parent().serializeArray(), 'user', 'delete_user');
+
+      });
+    }
+  },
+
+
+  updateSalesmansSales: function(){
+    if ($j('.doUpdateSales').length > 0) {
+      var self = this;
+      $j('.doUpdateSales').on('click', function(e){
+        e.preventDefault();
+        self.postData($j(this).parent().serializeArray(), 'user', 'update_salesmans_sales_status');
 
       });
     }
@@ -66,30 +80,29 @@ var user = {
     //     formDataNice[formData[variable].name] = formData[variable].value;
     //   }
     // }
-
-    if(method === 'create_user'){
-      this.getNonce(ctrl, method)
-      .done(function(res){
-        self.doAjax(res.nonce, formData, ctrl, method);
-      });
-    }
-    else {
-      self.doAjax('', formData, ctrl, method);
-    }
+    this.getNonce(ctrl, method)
+    .done(function(res){
+      formData.push({name:'nonce', value: res.nonce});
+      self.doAjax(formData, ctrl, method);
+    });
 
   },
 
-  doAjax: function(nonce, dataString, controller, method, callback){
+  doAjax: function(data, controller, method, callback){
     $j.ajax({
-      url: '../api/'+controller+'/'+method+'/?'+dataString,
+      url: '../api/'+controller+'/'+method,
       type: 'GET',
-      data: nonce,
+      data: data,
     })
     .done(function(msg) {
-      console.log('done: ' +msg);
+      console.log('done:');
+      console.log(msg);
+      console.log('');
     })
     .fail(function(jqXHR, textStatus, errorThrown ){
-      console.log(jqXHR + '    ' + textStatus + '    ' + errorThrown);
+      console.log(jqXHR);
+      console.log(textStatus);
+      console.log(errorThrown);
     });
 
   }

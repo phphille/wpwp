@@ -7,14 +7,14 @@
     if($user == 'associationDelegate' || $user == 'manager'){
       $loggedInmMenu .= '
       <a href="skapa-anvandare">Skapa användare</a>
-      <a href="se-anvandare">Se användare</a>
+      <a href="se-korvlador">Korvlådor</a>
       ';
     }
 
     if($user == 'salesperson'){
       $loggedInmMenu .= '
-      <a href="registrera-salda-korvlador">Registrera sålda korvlådor</a>
-      <a href="registrera-foretagskund">Registrera företagskund</a>';
+      <a href="se-korvlador">Korvlådor</a>
+      ';
     }
 
     $loggedInmMenu .= '<a href="konto">Konto</a>';

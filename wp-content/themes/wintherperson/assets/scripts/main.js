@@ -81,5 +81,8 @@ $j(document).ready(function(){
 
   user.init();
   excel.init();
+  company.init();
+  // plugins.init();
+  // console.log(plugins);
 
 });

@@ -1,59 +1,6 @@
 <?php
 
-function list_authors_edit() {
-  global $wp_roles;
 
-  $subUsersID = explode(',', get_the_author_meta('userids', get_current_user_id()));
-  var_dump($subUsersID);
-
-	$table = '';
-	if($subUsersID && !empty($subUsersID[0])){
-		wp_enqueue_style('author-list', plugin_dir_url(__FILE__) . '/css/author-list.css');
-
-		$table .= '
-    <form class="" action="" method="post">
-    <table class="table table-hover">
-      <tr>
-        <th><input type="checkbox" name="select-User"></th>
-        <th>Roll</th>
-        <th>Namn</th>
-        <th>Telefonnummer</th>
-        <th>Mail</th>
-      </tr>
-    ';
-
-			foreach($subUsersID as $subUserID) :
-
-        // if($author->ID == get_current_user_id()) break;
-        $subUser = new WP_User( $subUserID );
-          // $archive_url = get_author_posts_url($author->ID);
-					// $table .= get_avatar($author->user_email, 60);
-          // $table .= '<a href="'. $archive_url . '" title="'. $author->display_name . '">' . $author->display_name . '</a>';
-					// $table .= '<p class="author-bio">' . get_user_meta($author->ID, 'description', true) . '</p>';
-					// $table .= '<p class="author-archive"><a href="'. $archive_url . '" title="' . __('View all posts by ', 'pippin') . $author->display_name . '">' . __('View author\'s posts', 'pippin') . '</a></p>';
-          if($subUser->ID != get_current_user_id()){
-            $table .= '<tr>';
-            $table .= '<td><input type="checkbox" name="user[]" value="'.$subUser->ID.'"></td>';
-            $table .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$subUser->ID.'">'.translate_user_role( $wp_roles->roles[ $subUser->roles[0] ]['name'] ).'</a></td>';
-            $table .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$subUser->ID.'">'.$subUser->display_name.'</a></td>';
-            $table .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$subUser->ID.'">'.get_user_meta($subUser->ID, 'phonenumber', true).'</a></td>';
-            $table .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$subUser->ID.'">'.$subUser->user_email.'</a></td>';
-  				  $table .= '</tr>';
-          }
-			endforeach;
-
-		$table .= '</table>
-    <input type="submit" value="Ta bort" class="doDeleteUser">
-    </form>';
-
-	}
-  else{
-    $table = 'finns inte några';
-  }
-
-	return $table;
-}
-add_shortcode('authors', 'list_authors_edit');
 
 
 
@@ -224,6 +171,12 @@ function update_logged_in_user_profile() {
     <div class="input-group">
     <label for="">Repetera lösenord</label>
     <input type="password" name="password2" class="form-control" value="">
+    </div>
+
+
+    <div class="input-group">
+    <label for="">Nuvarande lösenord</label>
+    <input type="password" name="passwordCurrent" class="form-control" value="">
     </div>
 
 
