@@ -13,7 +13,7 @@
 
     if($user == 'salesperson'){
       $loggedInmMenu .= '
-      <a href="se-korvlador">Korvlådor</a>
+      <a href="registrera-salda-korvlador">Korvlådor</a>
       ';
     }
 

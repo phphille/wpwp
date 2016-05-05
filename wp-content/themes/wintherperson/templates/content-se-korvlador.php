@@ -32,12 +32,27 @@
     }
    ?>
 
-<?php endif; ?>
 
 
-<?php
 
 
-// echo do_shortcode('[authors]');
 
-?>
+<?php elseif(get_current_user_role() == 'manager'): ?>
+
+
+
+
+
+
+
+
+
+
+<?php elseif(get_current_user_role() == 'salesperson'): ?>
+
+
+
+
+  
+
+<?php endif;?>

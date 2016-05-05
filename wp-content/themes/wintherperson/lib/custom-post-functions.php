@@ -44,8 +44,9 @@ echo '<input type="hidden" name="custom_meta_box_nonce" value="'.wp_create_nonce
 
 // Save the Data
 function save_custom_meta($post_id) {
-  global $custom_meta_fields;
+  global $custom_meta_fields, $current_screen;
 
+  $correct_meta_fields = $custom_meta_fields[$current_screen->id];
   if(isset($_POST['custom_meta_box_nonce'])){
     // verify nonce
     if (!wp_verify_nonce($_POST['custom_meta_box_nonce'], basename(__FILE__)))
@@ -62,7 +63,7 @@ function save_custom_meta($post_id) {
     }
 
     // loop through fields and save the data
-    foreach ($custom_meta_fields as $field) {
+    foreach ($correct_meta_fields as $field) {
         $old = get_post_meta($post_id, $field['name'], true);
         $new = $_POST[$field['name']];
         if ($new && $new != $old) {
