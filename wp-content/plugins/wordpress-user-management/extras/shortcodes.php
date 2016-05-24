@@ -9,23 +9,16 @@
 
 
 
-function parent_create_salesmen($updateId) {
+function create_user_form($updateId) {
 
-  $edit_user_ids = get_the_author_meta('userids', get_current_user_id());
-  // var_dump($edit_user_ids);
-  // var_dump(get_current_user_id());
-	$users = get_users(array(
-			'orderby' => 'display_name',
-      'include' => $edit_user_ids,
-		)
-	);
-
-  $teams = [];
-  foreach($users as $user){
-    if(!in_array(get_user_meta($user->ID, 'team', true), $teams)){
-      $teams[] = get_user_meta($user->ID, 'team', true);
-    }
-  }
+  // $edit_user_ids = get_the_author_meta('userids', get_current_user_id());
+  // // var_dump($edit_user_ids);
+  // // var_dump(get_current_user_id());
+	// $users = get_users(array(
+	// 		'orderby' => 'display_name',
+  //     'include' => $edit_user_ids,
+	// 	)
+	// );
 
   if(isset($updateId['updateid'])){
     $userToUpdate = get_userdata( $updateId['updateid'] );
@@ -46,26 +39,59 @@ function parent_create_salesmen($updateId) {
     $form = '<form class="" action="" method="post">';
 
     if(get_current_user_role() == 'associationDelegate'){
-      if($teams && !empty($teams[0])){
+      $args  = array(
+      'role' => 'manager',
+      'meta_query' => array(
+          array(
+              // uses compare like WP_Query
+              'key' => 'associationDelegateParentId',
+              'value' => get_current_user_id(),
+              ),
+        )
+      );
+      $wp_user_query = new WP_User_Query($args);
+      $resManagers = $wp_user_query->get_results();
+      dump($resManagers);
+
+      $form .= '<select class="" name="prinskorv">
+          <option value="" disabled="disabled" selected="selected">Välj användartyp</option>
+          <option value="tjock">Lagledare</option>';
+          if($resManagers && !empty($resManagers[0])){
+            $form .= '<option value="smal">Säljare</option>';
+          }
+      $form .= '</select>';
+
+      if($resManagers && !empty($resManagers[0])){
         $form .= '<label for="">Välj lag:</label>';
         $form .=' <select class="" name="team">
             <option value="" disabled="disabled" selected="selected">Välj lag</option>';
 
-        foreach($teams as $team) :
+        foreach($resManagers as $manager) :
 
-          if (empty($team)) {
+          // if (empty($team)) {
+            $team = get_user_meta($manager->ID, 'team', true);
             $selected = $updateId != '' && get_user_meta($userToUpdate->ID, 'team', true) == $team ? 'selected' : '';
-            $form .= '<option value="'.$team.'" '.$selected.'>'.$team.'</option>';
-          }
+            $form .= '<option value="'.$manager->ID.'" '.$selected.'>'.$team.'</option>';
+          // }
 
         endforeach;
 
         $form .= '
         </select>';
       }
+
+      $form .= '<div class="checkbox">
+                  <label class="toggle_create_user_new_team"><input type="checkbox" value="1" name="create_user_new_team">Skapa nytt lag</label>
+                </div>
+                <div class="create_user_new_team displayNoneOnInit" >
+                  <label for="">Nytt lagnamn</label>
+                  <input type="text" name="new_team" value="">
+                </div>';
+
+
     }
 
-    $form .= get_current_user_role() == 'manager' ? '<input type="hidden" name="prinskorv" value="lightbulb">' : '';
+    $form .= get_current_user_role() == 'manager' ? '<input type="hidden" name="prinskorv" value="smal">' : '';
 
     $form .= $updateId != '' ? '<input type="hidden" name="antalKorvar" value="'.$userToUpdate->ID.'">' : '';
 
@@ -111,7 +137,7 @@ function parent_create_salesmen($updateId) {
 
   return $form;
 }
-add_shortcode('getCreateFormSalesmen', 'parent_create_salesmen');
+add_shortcode('getCreateFormUser', 'create_user_form');
 
 
 

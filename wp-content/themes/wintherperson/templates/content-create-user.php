@@ -16,5 +16,5 @@
 
 <?php
 if($user == 'associationDelegate' || $user == 'manager'){
-  echo do_shortcode('[getCreateFormSalesmen]');
+  echo do_shortcode('[getCreateFormUser]');
 }

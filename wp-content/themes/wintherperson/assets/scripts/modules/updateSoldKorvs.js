@@ -1,22 +1,17 @@
-var company = {
+var updateSoldKorvs = {
 
   init: function() {
-    this.addCompany();
+    this.updateKorvs();
   },
 
-  addCompany: function() {
-    if($j('.doAddCompany').length > 0){
+  updateKorvs: function() {
+    if($j('.updateSoldKorv').length > 0){
       var self = this;
-      $j('.doAddCompany').click(function(e) {
+      $j('.updateSoldKorv').click(function(e) {
         e.preventDefault();
         data = self.getNiceData($j(this).parent().serializeArray());
         console.log(data);
-        var formData = {
-					type: 'companies',
-					status: 'pending',
-					title: data['company-name'],
-				};
-        self.postData($j(this).parent().serialize(), formData, 'posts', 'create_post');
+        self.postData(data, 'user', 'update_sold_korvs');
       });
     }
 
@@ -41,21 +36,21 @@ var company = {
     });
   },
 
-  postData: function(query, formData, ctrl, method) {
+  postData: function(formData, ctrl, method) {
     var self = this;
 
     this.getNonce(ctrl, method)
       .done(function(res) {
         formData.nonce = res.nonce;
-        self.doAjax(query, formData, ctrl, method);
+        self.doAjax(formData, ctrl, method);
       });
 
   },
 
-  doAjax: function(query, data, controller, method, callback) {
+  doAjax: function(data, controller, method) {
     $j.ajax({
-        url: '../api/' + controller + '/' + method + '/?'+ query,
-        type: 'GET',
+        url: '../api/' + controller + '/' + method,
+        type: 'POST',
         data: data,
       })
       .done(function(msg) {

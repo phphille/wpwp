@@ -6,15 +6,19 @@
   $html = '';
   $useridsString = get_user_meta(get_current_user_id(), 'userids', true);
   $userIDs = explode(',',$useridsString);
+  dump($userIDs);
     foreach ($userIDs as $userID) {
-      $user = new WP_User( $userID );
-      if($user->roles[0] == 'manager'){
-        $selected = '';
-        if(isset($_POST['team']) && $userID == $_POST['team']){
-          $selected = 'selected';
-        }
-        $html .= '<option value="'.$userID.'" '.$selected.'>'.get_user_meta($userID, 'team', true).'</option>';
+      if($userID != ''){
+        $user = new WP_User( $userID );
+        // dump($user);
+        if($user->roles[0] == 'manager'){
+          $selected = '';
+          if(isset($_POST['team']) && $userID == $_POST['team']){
+            $selected = 'selected';
+          }
+          $html .= '<option value="'.$userID.'" '.$selected.'>'.get_user_meta($userID, 'team', true).'</option>';
 
+        }
       }
     }
   ?>
@@ -53,6 +57,6 @@
 
 
 
-  
+
 
 <?php endif;?>

@@ -6,7 +6,9 @@
 $korvlador = '';
 $company = '';
 $sum = '';
-
+$sumAntalPrivKorvlador = 0;
+$sumPrisPrivKorvlador = 0;
+$sumForetag = 0;
 
 $args = array(
 'post_type' => 'products',
@@ -21,100 +23,50 @@ $query = new WP_Query($args);
 if($query->posts){
   $korvlador ='
     <form class="" action="" method="post">';
+  $korvlador .= wp_nonce_field( 'update_sold_korvs','nya-korvar' );
 
     foreach ($query->posts as $product) {
       $artikelnamn = get_post_meta($product->ID,'artikelnamn',true);
+      $produktPris = get_post_meta($product->ID,'pris',true);
+      $nbrSoldProduct = get_user_meta(get_current_user_id(), $artikelnamn, true);
       $korvlador .='
       <div class="input-group">
         <label for="">'.$product->post_title.'</label>
-        <input type="number" name="'.$artikelnamn.'" class="form-control" value="'.get_user_meta(get_current_user_id(), $artikelnamn, true).'">
+        <input type="number" name="'.$artikelnamn.'" class="form-control" value="'.$nbrSoldProduct.'">
       </div>';
+      $sumAntalPrivKorvlador += $nbrSoldProduct;
+      $sumPrisPrivKorvlador += (floatval($produktPris) * floatval($nbrSoldProduct));
     }
-
-
-
   $korvlador .='
-      <input class="btn btn-default doUpdateSales" type="submit" value="Uppdatera">
+      <input class="btn btn-default updateSoldKorv" name="update_sold_korv" type="submit" value="Uppdatera">
     </form>';
 
 
-  $company = '
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button>
+$args = array(
+  'author' => get_current_user_id(),
+  'post_type' => 'companies',
+  'posts_per_page' => -1,
+  'post_status' => array('publish', 'pending', 'draft', 'auto-draft')
+);
 
-<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      ...
-    </div>
-  </div>
-</div>
+$company = '<a href="foretagskund">Registrera nytt företag</a>';
 
-  <form class="" action="" method="post">
-    <h4>Företag</h4>
-    <div class="input-group">
-      <label for="">Företagsnamn</label>
-      <input type="text" name="name" class="form-control" value="">
-    </div>
-    <div class="input-group">
-      <label for="">Organistationsnummer</label>
-      <input type="text" name="org-nbr" class="form-control" value="">
-    </div>
-    <div class="input-group">
-      <label for="">Adress</label>
-      <input type="text" name="address" class="form-control" value="">
-    </div>
-    <div class="input-group">
-      <label for="">Stad</label>
-      <input type="text" name="city" class="form-control" value="">
-    </div>
-    <div class="input-group">
-      <label for="">Postnummer</label>
-      <input type="text" name="postalcode" class="form-control" value="">
-    </div>
-    <div class="input-group">
-      <label for="">E-post</label>
-      <input type="text" name="contactMail" class="form-control" value="">
-    </div>
+$author_posts = new WP_Query( $args );
 
-    <p>Kontaktuppgifter</p>
-    <div class="input-group">
-      <label for="">Förnamn</label>
-      <input type="text" name="contactFirstname" class="form-control" value="">
-    </div>
-    <div class="input-group">
-      <label for="">Efternamn</label>
-      <input type="text" name="contactLastname" class="form-control" value="">
-    </div>
-    <div class="input-group">
-      <label for="">Telefon</label>
-      <input type="text" name="contactPhone" class="form-control" value="">
-    </div>
+if( $author_posts->have_posts() ) {
+  foreach ($author_posts->posts as $post) {
+    $company .= '<div class="row"><div class="col-sm-12">';
+    $company .= '<a href="foretagskund/?id='.$post->ID.'">Företag: '.$post->post_title.'</a>';
+    $company .= '</div></div>';
+    $sumForetag++;
+  }
+}
 
 
-    <p>Kontaktuppgifter för leverans</p>
-    <div class="input-group">
-      <label for="">Förnamn</label>
-      <input type="text" name="deliveryFirstname" class="form-control" value="">
-    </div>
-    <div class="input-group">
-      <label for="">Efternamn</label>
-      <input type="text" name="deliveryLastname" class="form-control" value="">
-    </div>
-    <div class="input-group">
-      <label for="">Telefon</label>
-      <input type="text" name="deliveryPhone" class="form-control" value="">
-    </div>
+  $sum = '<p>Lådor privat: '.$sumAntalPrivKorvlador.'</p>';
+  $sum .= '<p>Summa lådor privat: '.$sumPrisPrivKorvlador.' kr</p>';
+  $sum .= '<p>Antal företagskunder: '.$sumForetag.'</p>';
 
-    <p>Utkörning</p>
-    <div class="checkbox">
-      <label>
-        <input type="checkbox"> Vill ha utkörning
-      </label>
-    </div>
-
-
-    <input class="btn btn-default doAddCompany" type="submit" value="Uppdatera">
-  </form>';
 }
 
 // echo $html;
@@ -124,7 +76,7 @@ if($query->posts){
 
 <div class="row">
 
-<div class="col-md-3">
+<div class="col-sm-3">
 <?php if($query->posts): ?>
 
   <?php echo $korvlador; ?>
@@ -139,13 +91,13 @@ if($query->posts){
 
 </div>
 
-<div class="col-md-5">
+<div class="col-sm-5">
   <?php echo $company; ?>
 </div>
 
 
 
-<div class="col-md-4">
+<div class="col-sm-4">
   <?php echo $sum; ?>
 </div>
 </div>

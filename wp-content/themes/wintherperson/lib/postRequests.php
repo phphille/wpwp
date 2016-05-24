@@ -73,33 +73,307 @@ add_action( 'wp_ajax_save_created_user', 'save_created_user' );
 
 
 
-function create_user_by_excel(){
 
-  if(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION) == 'xlsx' || pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION) == 'xls'){
-    $inputFileType = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);
-    $inputFileName = $_FILES['file']['tmp_name'];
+add_action('wp_loaded', 'save_company_form');
+function save_company_form(){
 
-    //  Read your Excel workbook
-    try {
-        $inputFileType = PHPExcel_IOFactory::identify($inputFileName);
-        $objReader = PHPExcel_IOFactory::createReader($inputFileType);
-        $objPHPExcel = $objReader->load($inputFileName);
-    } catch(Exception $e) {
-        die('Error loading file "'.pathinfo($inputFileName,PATHINFO_BASENAME).'": '.$e->getMessage());
+  if(isset($_POST['do-company'])){
+    if(empty($_POST) || !wp_verify_nonce($_POST['ny-stor-korv'],'add_new_company') ){
+      print 'Sorry, your nonce did not verify.';
+      exit;
     }
 
-    //  Get worksheet dimensions
-    $sheet = $objPHPExcel->getSheet(0);
-    $highestRow = $sheet->getHighestRow();
-    $highestColumn = $sheet->getHighestColumn();
+    if(
+    // preg_match("/^([a-zåäöA-ZÅÄÖ]{1}|[a-zåäöA-ZÅÄÖ]{1}[a-zåäöA-ZÅÄÖ ]{1,})$/", $_POST['company_name']) &&
+    // // checkOrgNbr($_POST['company_org-nbr']) &&
+    // preg_match("/^([a-zåäöA-ZÅÄÖ]{1}|[a-zåäöA-ZÅÄÖ]{1}[a-zåäöA-ZÅÄÖ ]{1,})$/", $_POST['company_address']) &&
+    // preg_match("/^([a-zåäöA-ZÅÄÖ]{2}|[a-zåäöA-ZÅÄÖ]{1}[a-zåäöA-ZÅÄÖ ]{1,})$/", $_POST['company_city']) &&
+    // preg_match("/^[0-9]{3}[ ]?[0-9]{2}$/", $_POST['company_postalcode']) &&
+    // is_email($_POST['company_contactMail']) &&
+    // preg_match("/^([a-zåäöA-ZÅÄÖ]{1}|[a-zåäöA-ZÅÄÖ]{1}[a-zåäöA-ZÅÄÖ ]{1,})$/", $_POST['company_contactFirstname']) &&
+    // preg_match("/^([a-zåäöA-ZÅÄÖ]{1}|[a-zåäöA-ZÅÄÖ]{1}[a-zåäöA-ZÅÄÖ ]{1,})$/", $_POST['company_contactLastname']) &&
+    // preg_match("/^[0-9+ ]$/", $_POST['company_contactPhone']) &&
+    // preg_match("/^([a-zåäöA-ZÅÄÖ]{1}|[a-zåäöA-ZÅÄÖ]{1}[a-zåäöA-ZÅÄÖ ]{1,})$/", $_POST['company_deliveryFirstname']) &&
+    // preg_match("/^([a-zåäöA-ZÅÄÖ]{1}|[a-zåäöA-ZÅÄÖ]{1}[a-zåäöA-ZÅÄÖ ]{1,})$/", $_POST['company_deliveryLastname']) &&
+    // preg_match("/^[0-9+ ]$/", $_POST['company_deliveryPhone']) &&
+    get_current_user_role() == 'salesperson'
+    ){
 
-    //  Loop through each row of the worksheet in turn
-    for ($row = 2; $row <= $highestRow; $row++){
-        //  Read a row of data into an array
-        $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row, NULL, TRUE, FALSE);
-        dump($rowData);
-        //  Insert row data array into your database of choice here
+      if(isset($_POST['korven']) && is_numeric($_POST['korven'])){
+        $post_to_update = get_post($_POST['korven']);
+
+        if($post_to_update->post_author == get_current_user_id()){
+          $post = array(
+          'ID'           => $post_to_update->ID,
+          'post_title' => wp_strip_all_tags( $_POST['company_name'] ),
+          'post_type' => 'companies',  // Use a custom post type if you want to
+          'post_author' => get_current_user_id()
+          );
+        }
+      }
+      else {
+        $post = array(
+        'post_title' => wp_strip_all_tags( $_POST['company_name'] ),
+        'post_type' => 'companies',  // Use a custom post type if you want to
+        'post_author' => get_current_user_id()
+        );
+
+      }
+
+      $postid = wp_insert_post($post, true);
+
+      if(!isset($postid->errors)){
+        update_post_meta($postid, 'companyName', $_POST['company_name']);
+        update_post_meta($postid, 'companyOrgNbr', $_POST['company_org-nbr']);
+        update_post_meta($postid, 'companyAddress', $_POST['company_address']);
+        update_post_meta($postid, 'companyCity', $_POST['company_city']);
+        update_post_meta($postid, 'companyPostalcode', $_POST['company_postalcode']);
+        update_post_meta($postid, 'companyContactMail', $_POST['company_contactMail']);
+        update_post_meta($postid, 'companyContactFirstname', $_POST['company_contactFirstname']);
+        update_post_meta($postid, 'companyContactLastname', $_POST['company_contactLastname']);
+        update_post_meta($postid, 'companyContactPhone', $_POST['company_contactPhone']);
+        update_post_meta($postid, 'companyDeliveryFirstname', $_POST['company_deliveryFirstname']);
+        update_post_meta($postid, 'companyDeliveryLastname', $_POST['company_deliveryLastname']);
+        update_post_meta($postid, 'companyDeliveryPhone', $_POST['company_deliveryPhone']);
+
+
+        if(isset($_POST['company_want-delivery']) && $_POST['company_want-delivery'] == '1'){
+          update_post_meta($postid, 'companyWantDelivery', 'ja');
+        }
+        else {
+          update_post_meta($postid, 'companyWantDelivery', 'nej');
+        }
+        wp_reset_postdata();
+        wp_redirect( home_url('/registrera-salda-korvlador/') );
+        exit;
+      }
+
     }
   }
 }
-add_action( 'wp_ajax_create_user_by_excel', 'create_user_by_excel' );
+
+
+
+
+
+
+
+
+
+
+add_action('wp_loaded', 'export_to_excel_as_admin');
+function export_to_excel_as_admin(){
+
+    // var_dump($_POST);
+    // var_dump(get_current_user_role());
+    // var_dump(is_numeric($_POST['do-excel-admin']));
+  if(isset($_POST['do-excel-admin']) && get_current_user_role() == 'administrator' && is_numeric($_POST['excel-team'])){
+    $team = $_POST['excel-team'];
+    $manager = get_userdata( $team );
+    $teamSalespersons = get_users(array(
+        'meta_key'     => 'managerParentId',
+        'meta_value'   => $team,
+    ));
+
+    $args = array(
+    'post_type' => 'products',
+    'post_status' => 'publish',
+    'posts_per_page' => -1,
+    );
+
+    $korvladsTyper = new WP_Query($args);
+
+    $objPHPExcel = new PHPExcel();
+    $objPHPExcel->setActiveSheetIndex(0);
+    $objPHPExcel->getActiveSheet()->setCellValue('A1', "Namn")->getStyle('A1:F1')->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValue('B1', "Adress");
+    $objPHPExcel->getActiveSheet()->setCellValue('C1', "Postnummer");
+    $objPHPExcel->getActiveSheet()->setCellValue('D1', "Ort");
+    $objPHPExcel->getActiveSheet()->setCellValue('E1', "Telefon");
+    $objPHPExcel->getActiveSheet()->setCellValue('F1', "Sålda lådor totalt");
+    $col = 6;
+    foreach ($korvladsTyper->posts as $typ) {
+      $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 1, $typ->post_title)->getStyleByColumnAndRow($col, 1)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+      $products[] = array('artikelNamn' => get_post_meta($typ->ID,'artikelnamn',true), 'pris' => get_post_meta($typ->ID,'pris',true));
+      $col++;
+    }
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 1, "Summa kr")->getStyleByColumnAndRow($col, 1)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col+1, 1, "Leverans")->getStyleByColumnAndRow($col+1, 1)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col+2, 1, "Betalt")->getStyleByColumnAndRow($col+2, 1)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col+3, 1, "Kommentar")->getStyleByColumnAndRow($col+3, 1)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+
+
+
+    $totalKorvladorForTypes = [];
+    for ($i=0; $i<count($products); $i++) {
+      $totalKorvladorForTypes[] = 0;
+    }
+
+    $salespersonsRow = '';
+    $dataArr = [];
+    foreach($teamSalespersons as $salesperson){
+      $dataArr[] = array();
+      $index = count($dataArr);
+
+      // $salespersonsRow .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$salesperson->ID.'">'.$salesperson->first_name.' '.$salesperson->last_name.'</a></td>';
+      $dataArr[($index-1)][] = $salesperson->first_name.' '.$salesperson->last_name;
+      $dataArr[($index-1)][] = get_user_meta($salesperson->ID, 'address', true);
+      $dataArr[($index-1)][] = get_user_meta($salesperson->ID, 'zip', true);
+      $dataArr[($index-1)][] = get_user_meta($salesperson->ID, 'city', true);
+      $dataArr[($index-1)][] = get_user_meta($salesperson->ID, 'phone', true);
+
+      $totalKorvlador = 0;
+      $totalSum = 0;
+      $tdKorvlador = '';
+      $count = 0;
+      $salesPersonsNbrSoldKorvlador = [];
+      foreach ($products as $product) {
+        $nbrSoldKorvlada = get_user_meta($salesperson->ID, $product['artikelNamn'], true);
+        $totalSum += (floatval($nbrSoldKorvlada) * floatval($product['pris']));
+        $totalKorvlador += $nbrSoldKorvlada;
+
+        // $salespersonsRow .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$salesperson->ID.'">'.$nbrSoldKorvlada.'</a></td>';
+        $salesPersonsNbrSoldKorvlador[] = $nbrSoldKorvlada;
+        $totalKorvladorForTypes[$count] += $nbrSoldKorvlada;
+      }
+
+      // $salespersonsRow .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$salesperson->ID.'">'.$totalKorvlador.'</a></td>';
+      $dataArr[($index-1)][] = $totalKorvlador;
+      // $salespersonsRow .= $tdKorvlador;
+      foreach ($salesPersonsNbrSoldKorvlador as $value) {
+        $dataArr[($index-1)][] = $value;
+      }
+      // $salespersonsRow .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$salesperson->ID.'">'.$totalSum.'</a></td>';
+      $dataArr[($index-1)][] = $totalSum;
+      // $salespersonsRow .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$salesperson->ID.'">'.'</a></td>';
+      $dataArr[($index-1)][] = 'saknas';
+      // $salespersonsRow .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$salesperson->ID.'">'.'</a></td>';
+      $dataArr[($index-1)][] = 'saknas';
+      // $salespersonsRow .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$salesperson->ID.'">'.'</a></td>';
+      $dataArr[($index-1)][] = 'saknas';
+
+      $args = array(
+      'post_type' => 'companies',
+      'author' =>  $salesperson->ID,
+      'post_status' => array('publish', 'pending', 'draft', 'auto-draft'),
+      'posts_per_page' => -1,
+      );
+
+      $companies = new WP_Query($args);
+      if(!empty($companies->posts)){
+        $dataArr[($index-1)][] = array();
+        $indexCompanyArr = count($dataArr[($index-1)]);
+
+        foreach($companies->posts as $company){
+          $dataArr[($index-1)][$indexCompanyArr][] = array(
+            get_post_meta($company->ID, 'companyName', true),
+            get_post_meta($company->ID, 'companyOrgNbr', true),
+            get_post_meta($company->ID, 'companyAddress', true),
+            get_post_meta($company->ID, 'companyCity', true),
+            get_post_meta($company->ID, 'companyPostalcode', true),
+            get_post_meta($company->ID, 'companyContactMail', true),
+            get_post_meta($company->ID, 'companyContactFirstname', true),
+            get_post_meta($company->ID, 'companyContactLastname', true),
+            get_post_meta($company->ID, 'companyContactPhone', true),
+            get_post_meta($company->ID, 'companyDeliveryFirstname', true),
+            get_post_meta($company->ID, 'companyDeliveryLastname', true),
+            get_post_meta($company->ID, 'companyDeliveryPhone', true),
+            get_post_meta($company->ID, 'companyWantDelivery', true)
+          );
+        }
+      }
+    }
+
+    $row = 2;
+    foreach ($dataArr as $arr) {
+      $col = 0;
+      foreach ($arr as $value) {
+        if(is_array($value)){
+          foreach ($value as $company) {
+            $row++;
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, 'Företag:')->getStyleByColumnAndRow(0, $row)->applyFromArray(array(
+                'font'  => array(
+                  'bold'  => true,
+                ),
+                'alignment' => array(
+                  'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+                ),
+              )
+            );
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, 'Namn')->getStyleByColumnAndRow(1, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, 'Organisationsnummer')->getStyleByColumnAndRow(2, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, 'Address')->getStyleByColumnAndRow(3, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, 'Ort')->getStyleByColumnAndRow(4, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, 'Postnummer')->getStyleByColumnAndRow(5, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, 'E-post')->getStyleByColumnAndRow(6, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, 'Kontakt Förnamn')->getStyleByColumnAndRow(7, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, 'Kontakt Efternamn')->getStyleByColumnAndRow(8, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, 'Kontakt Telefon')->getStyleByColumnAndRow(9, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, 'Leverans Förnamn')->getStyleByColumnAndRow(10, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $row, 'Leverans Efternamn')->getStyleByColumnAndRow(11, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $row, 'Leverans Telefon')->getStyleByColumnAndRow(12, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(13, $row, 'Vill ha utkörning')->getStyleByColumnAndRow(13, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+            $row++;
+            $col = 1;
+            foreach ($company as $companyVal) {
+              $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $companyVal);
+              $col++;
+            }
+            // $row++;
+          }
+        }
+        else {
+          $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $value);
+        }
+        $col++;
+      }
+      $row++;
+    }
+
+    // $managerRow = '<tr>';
+    // $managerRow .= '<td><input type="checkbox" name="user[]" value="'.$manager->ID.'"></td>';
+    // $managerRow .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$manager->ID.'">Teamleader '.$manager->first_name.' '.$manager->last_name.'</a></td>';
+
+
+    // $index = 0;
+    // $totalTeamNbrKorvlador = 0;
+    // $totalTeamSum = 0;
+    // $managerTdProducts ='';
+    // foreach ($totalKorvladorForTypes as $totalNbrType) {
+    //   $sum = floatval($totalNbrType) * floatval($products[$index]);
+    //   $totalTeamNbrKorvlador += $totalNbrType;
+    //   $totalTeamSum += $sum;
+    //   $managerTdProducts .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$salesperson->ID.'">'.$sum.'</a></td>';
+    // }
+    // $managerRow .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$salesperson->ID.'">'.$totalTeamNbrKorvlador.'</a></td>';
+    // $managerRow .= $managerTdProducts;
+    // $managerRow .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$salesperson->ID.'">'.$totalTeamSum.'</a></td>';
+    // $managerRow .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$salesperson->ID.'"></a></td>';
+    // $managerRow .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$salesperson->ID.'"></a></td>';
+    // $managerRow .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$salesperson->ID.'"></a></td>';
+    // $managerRow .= '</tr>';
+    //
+    // $table .= $managerRow;
+    // $table .= $salespersonsRow;
+
+
+    // $objPHPExcel->getActiveSheet()->getPageSetup()->setRowsToRepeatAtTopByStartAndEnd(1, 1);
+
+    // Redirect output to a client’s web browser (Excel5)
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="01simple.xls"');
+    header('Cache-Control: max-age=0');
+    // If you're serving to IE 9, then the following may be needed
+    header('Cache-Control: max-age=1');
+    // If you're serving to IE over SSL, then the following may be needed
+    header ('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+    header ('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); // always modified
+    header ('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+    header ('Pragma: public'); // HTTP/1.0
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+    $objWriter->save('php://output');
+    exit;
+
+
+  }
+}

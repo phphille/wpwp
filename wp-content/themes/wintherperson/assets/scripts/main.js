@@ -76,12 +76,34 @@
 //
 // })(jQuery); // Fully reference jQuery after this point.
 
+//
+// (function($) {
+//   $(document).ready(function(){
+//
+//
+//
+//
+//
+//   });
+//
+// })(jQuery); // Fully reference jQuery after this point.
+
+
 $j=jQuery.noConflict();
 $j(document).ready(function(){
 
+  $j('.toggle_create_user_new_team').on('click', function(e){
+    if($j('input[name="create_user_new_team"]', $j(this)).is(':checked')){
+      $j('.create_user_new_team').show();
+    }
+    else {
+      $j('.create_user_new_team').hide();
+    }
+  });
+
   user.init();
   excel.init();
-  company.init();
+  updateSoldKorvs.init();
   // plugins.init();
   // console.log(plugins);
 

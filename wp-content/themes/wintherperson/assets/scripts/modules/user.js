@@ -45,7 +45,7 @@ var user = {
       var self = this;
       $j('.doDeleteUser').on('click', function(e){
         e.preventDefault();
-        console.log($j(this).parent().serializeArray());
+        // console.log($j(this).parent().serializeArray());
         self.postData($j(this).parent().serializeArray(), 'user', 'delete_user');
 
       });

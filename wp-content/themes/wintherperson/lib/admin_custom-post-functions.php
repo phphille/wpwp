@@ -9,6 +9,12 @@ echo '<input type="hidden" name="custom_meta_box_nonce" value="'.wp_create_nonce
     // Begin the field table and loop
     echo '<table class="form-table">';
     foreach ($custom_meta_fields[$current_screen->id] as $field) {
+
+      if($field['name'] == 'heading'){
+        echo '<tr><th col-span="2"></th><tr>';
+        echo '<tr><th col-span="2">'.$field['label'].'</th><tr>';
+      }
+      else {
         // get value of this field if it exists for this post
         $meta = get_post_meta($post->ID, $field['name'], true);
         // begin a table row with
@@ -37,8 +43,10 @@ echo '<input type="hidden" name="custom_meta_box_nonce" value="'.wp_create_nonce
                     break;
                 } //end switch
         echo '</td></tr>';
+      }
     } // end foreach
     echo '</table>'; // end table
+
 }
 
 
@@ -46,8 +54,8 @@ echo '<input type="hidden" name="custom_meta_box_nonce" value="'.wp_create_nonce
 function save_custom_meta($post_id) {
   global $custom_meta_fields, $current_screen;
 
-  $correct_meta_fields = $custom_meta_fields[$current_screen->id];
   if(isset($_POST['custom_meta_box_nonce'])){
+    $correct_meta_fields = $custom_meta_fields[$current_screen->id];
     // verify nonce
     if (!wp_verify_nonce($_POST['custom_meta_box_nonce'], basename(__FILE__)))
         return $post_id;

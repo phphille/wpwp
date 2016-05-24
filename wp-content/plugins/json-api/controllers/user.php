@@ -3,6 +3,9 @@
 Controller name: User
 Controller description: Create/Update/Delete user data
 */
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 class JSON_API_User_Controller {
 
@@ -52,7 +55,16 @@ class JSON_API_User_Controller {
     $_zip             = sanitize_text_field($query['zip']);
     $_city            = sanitize_text_field($query['city']);
     $_team            = sanitize_text_field($query['team']);
-    $role             = sanitize_text_field($query['prinskorv']);
+    $role             = sanitize_text_field($query['prinskorv']) == 'tjock' || sanitize_text_field($query['prinskorv']) == 'smal' ? sanitize_text_field($query['prinskorv']) : false;
+    $new_team_checked = isset($query['create_user_new_team']) ? sanitize_text_field($query['create_user_new_team']) : null;
+    $new_team         = sanitize_text_field($query['new_team']);
+
+    if($role == 'tjock')
+      $role = 'manager';
+
+    if($role == 'smal')
+      $role = 'salesperson';
+
 
     $userdata = array(
   		'user_login'	 =>	$user_login,
@@ -61,7 +73,7 @@ class JSON_API_User_Controller {
       'first_name'	 =>	$first_name,
       'last_name'	   =>	$last_name,
       'user_registered' => date("Y-m-d H:i:s"),
-      'role'         =>  $role == 'tjock' ? 'manager' : 'salesperson',
+      'role'         =>  $role,
     );
 
 
@@ -76,7 +88,9 @@ class JSON_API_User_Controller {
         isset($last_name) &&
         !empty($last_name) &&
         isset($_phone) &&
-        !empty($_phone) ) {
+        !empty($_phone)&&
+        isset($role) &&
+        !empty($role) ) {
       // create new user
       $createdUserID = wp_insert_user( $userdata );
       if ( ! is_wp_error( $createdUserID ) ) {
@@ -84,7 +98,13 @@ class JSON_API_User_Controller {
         update_user_meta( $createdUserID,'address', $_address );
         update_user_meta( $createdUserID,'zip', $_zip );
         update_user_meta( $createdUserID,'city', $_city );
-    		update_user_meta( $createdUserID,'team',  $_team  );
+        if(isset($new_team_checked) && trim($new_team) != '' && $role == 'manager'){
+    		  update_user_meta( $createdUserID,'team',  $new_team  );
+        }
+        else {
+          update_user_meta( $createdUserID,'team',  $_team  );
+        }
+
         if($role == 'manager'){
           update_user_meta( $createdUserID, 'associationDelegateParentId',  get_current_user_id() );
         }
@@ -93,29 +113,26 @@ class JSON_API_User_Controller {
 
         //Om en föreningsansvarig skapat en säljare, uppdatera säljarens lagledares userids
         if($role == 'salesperson' && $loggedInUserRole == 'associationDelegate'){
-          $editableIds = explode(',', get_user_meta(get_current_user_id(), 'userids', true));
-          foreach ($editableIds as $value) {
-            $user = new WP_User( $value);
-            if (isset($user->roles[0]) && $user->roles[0] == 'manager' && get_user_meta($value, 'team', true) == $_team) {
-              $editableIds = get_user_meta($value, 'userids', true) == '' ? $createdUserId : get_user_meta($value, 'userids', true).','.$createdUserId;
-              update_user_meta( $value, 'userids', $editableIds);
-              //Lägg till lagledarens id på säljaren
-              update_user_meta( $createdUserID, 'managerParentId',  $value );
-              //Lägg till föreningsansvarigs id på säljaren
-              update_user_meta( $createdUserID, 'associationDelegateParentId',  get_current_user_id() );
-            }
-          }
+          $managerEditableIds = get_user_meta($_team, 'userids', true);
+          $managerEditableIds = $managerEditableIds == '' ? $createdUserID : $managerEditableIds.','.$createdUserID;
+          update_user_meta( $_team, 'userids', $managerEditableIds);
+          //Lägg till lagledarens id på säljaren
+          update_user_meta( $createdUserID, 'managerParentId',  $_team );
+          //Lägg till föreningsansvarigs id på säljaren
+          update_user_meta( $createdUserID, 'associationDelegateParentId',  get_current_user_id() );
         }
 
         //Om en lagledare skapat en säljare, kolla om säljare är kopplad till en föreningsansvarig och i så fall uppdatera föreningsansvarig userids
         if($role == 'salesperson' && $loggedInUserRole == 'manager'){
           //Lägg till lagledarens id på säljaren
           update_user_meta( $createdUserID, 'managerParentId',  get_current_user_id() );
-
           $associationDelegateParentId = get_user_meta(get_current_user_id(), 'associationDelegateParentId', true);
+          //om det lagledaren är kopplad till en föreningsansvarig
           if(!empty($associationDelegateParentId)){
-            $editableIds = get_user_meta($associationDelegateParentId, 'userids', true) == '' ? $createdUserId : get_user_meta($associationDelegateParentId, 'userids', true).','.$createdUserId;
-            update_user_meta( get_current_user_id(), 'userids', $editableIds);
+            $associationDelegateEditableIds = get_user_meta($associationDelegateParentId, 'userids', true);
+            $associationDelegateEditableIds = $associationDelegateEditableIds == '' ? $createdUserId : $associationDelegateEditableIds.','.$createdUserId;
+            //uppdatera föreningsansvarigs userids
+            update_user_meta( $associationDelegateParentId, 'userids', $editableIds);
             //Lägg till föreningsansvarigs id på säljaren
             update_user_meta( $createdUserID, 'associationDelegateParentId',  $associationDelegateParentId );
           }
@@ -202,18 +219,19 @@ class JSON_API_User_Controller {
   function delete_user() {
     global $json_api;
     require_once(ABSPATH.'wp-admin/includes/user.php' );
+
     $url = parse_url($_SERVER['REQUEST_URI']);
     $defaults = array();
     $query = wp_parse_args($url['query']);
     $users = $query['user'];
     $nonce_id = $json_api->get_nonce_id('user', 'delete_user');
 
-    if (!wp_verify_nonce($json_api->query->nonce, $nonce_id)) {
-      $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
-    }
+    // if (!wp_verify_nonce($json_api->query->nonce, $nonce_id)) {
+    //   $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
+    // }
     // var_dump($users);
     $editableIds = explode(',', get_user_meta(get_current_user_id(), 'userids', true));
-    // var_dump($editableIds);
+
     $stop = false;
     foreach ($users as $user) {
       if(!is_numeric($user) || !in_array($user, $editableIds))
@@ -226,22 +244,35 @@ class JSON_API_User_Controller {
       foreach ($users as $user) {
         //remove id from parents userids
         $parentIds = [];
-        $parentIds[] = get_user_meta($user, 'associationDelegateParentId', true);
-        $parentIds[] = get_user_meta($user, 'managerParentId', true);
-
+        $associationDelegateId = get_user_meta($user, 'associationDelegateParentId', true);
+        $managerParentId = get_user_meta($user, 'managerParentId', true);
+        if(is_numeric($associationDelegateId)){
+          $parentIds[] = $associationDelegateId;
+        }
+        if(is_numeric($managerParentId)){
+          $parentIds[] = $managerParentId;
+        }
+        // dump($parentIds);
+        $dontDeleteUser = false;
         foreach ($parentIds as $parentId) {
-          if(is_numeric($parentId)){
-            $ids = explode(',', get_user_meta($parentId, 'userids', true));
-            if(($key = array_search($user, $ids)) !== false) {
-              unset($ids[$key]);
-              update_user_meta($parentId, 'userids', implode(',', $ids));
-            }
+          $ids = explode(',', get_user_meta($parentId, 'userids', true));
+          $parent = new WP_User( $parentId);
+          // echo 'parent role: '.$parent->roles[0].'   '.$parent->user_login;
+          // dump($ids);
+          if(($key = array_search($user, $ids)) !== false) {
+            unset($ids[$key]);
+            // dump($ids);
+            // dump(implode(',', $ids));
+            // dump($parentId);
+            // echo '<br>';
+            // echo "res:";
+            update_user_meta($parentId, 'userids', implode(',', $ids) );
+
           }
         }
 
-        // var_dump($user);
         //delete user
-        $delete_user = wp_delete_user( $user );
+        $delete_user = wp_delete_user( intval($user) );
         if ( ! is_wp_error( $user ) ) {
 
           $res[] = $delete_user;
@@ -249,6 +280,7 @@ class JSON_API_User_Controller {
           $res[] = $delete_user;
         }
 
+        var_dump($delete_user);
       }
 
       return $res;
@@ -390,6 +422,22 @@ class JSON_API_User_Controller {
     else {
       return false;
     }
+
+  }
+
+
+  function update_sold_korvs(){
+    global $json_api;
+    $url = parse_url($_SERVER['REQUEST_URI']);
+    $defaults = array();
+    $query = wp_parse_args($url['query']);
+    $nonce_id = $json_api->get_nonce_id('user', 'update_sold_korvs');
+
+    if (!wp_verify_nonce($json_api->query->nonce, $nonce_id) || get_current_user_role() != 'salesperson') {
+      $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
+    }
+
+    return $query;
 
   }
 
