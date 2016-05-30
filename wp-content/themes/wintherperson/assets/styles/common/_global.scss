@@ -14,3 +14,34 @@ body {
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > .active > a:hover {
 }
+
+.headerbonus {
+	margin-top: 25px;
+}
+
+.headerbonus li {
+	margin-bottom: 10px;
+	font-size: 16px;
+}
+
+.headline_black {
+	display: block;
+	background: #000000;
+	color:#FFFFFF;
+	padding:15px 15px;
+}
+
+.headline_black h3 {
+	margin:0;
+}
+
+.vinnare_bild {
+	width:50%;
+	height:auto;
+}
+
+.rounded_box {
+	border:1px solid grey;
+	border-radius: 5px;
+	padding: 0 20px 20px;
+}
