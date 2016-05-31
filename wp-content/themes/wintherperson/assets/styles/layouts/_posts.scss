@@ -1,0 +1,33 @@
+.row_divider {
+	margin-top: 75px;
+}
+
+.row_divider > div{
+	position: relative;
+	margin:0 auto;
+	height: 11px;
+	width:85%;
+	background-image: url("../images/line_middle.png");
+	background-repeat: repeat-x;
+	
+}
+
+.row_divider > div:before {
+	position: absolute;
+	left:-93px;
+	content: " ";
+	height: 11px;
+	width:93px;
+	background-image: url("../images/line_left.png");
+	background-repeat: no-repeat;
+}
+
+.row_divider > div:after {
+	position: absolute;
+	left:100%;
+	content: " ";
+	height: 11px;
+	width:93px;
+	background-image: url("../images/line_right.png");
+	background-repeat: no-repeat;
+}

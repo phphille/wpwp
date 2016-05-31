@@ -6,14 +6,6 @@ function my_custom_post_product() {
   $prefix = 'product_';
   $custom_meta_fields['products'] = array(
 			array(
-          'label'=> 'Bild',
-          'desc'  => 'Tillåtna filtyper: jpg, png',
-          'id'    => 'attachment',
-          'class' => '',
-          'name' => 'attachment',
-          'type'  => 'image'
-      ),
-			array(
           'label'=> 'Ange pris',
           'desc'  => '',
           'id'    => '',

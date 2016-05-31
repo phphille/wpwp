@@ -1,10 +1,15 @@
 .navbar {
 	background:#FFFFFF;
 	border:none;
+	margin-bottom: 0;
 }
 
 .navbar-header {
 	float:none;
+}
+
+.nav-primary {
+	border-bottom: 1px solid black;
 }
 
 .navbar-collapse.collapse {
@@ -29,12 +34,11 @@
 	float: left; 
 	display: block; 
 	right: 50%;
-	border-bottom: 1px solid black;
 	padding-bottom: 3px;
 }
 
 .navbar-default .navbar-nav > li > a {
-	padding:6px 11px;
+	padding:4px 17px;
 }
 
 .navbar-default .navbar-nav > li > a:hover {
@@ -64,7 +68,8 @@
 }
 
 #header-logo {
-	padding:25px 0 15px;
+	position: relative;
+	padding:25px 0 20px;
 }
 
 .header-logo_nonmobile img{
@@ -74,4 +79,39 @@
 .header-logo_mobile {
 	float:left;
 	width:70%;
+}
+
+.social_icons {
+	float:right;
+	margin-top:10px;
+}
+
+.social_icons img {
+	opacity: 0.15;
+	width:25px;
+	height:auto;
+}
+
+.social_icons img:hover {
+	opacity: 0.25;
+}
+
+.login_actions {
+	position: absolute;
+	left: 0;
+	top:35px;
+}
+
+.login_actions a {
+	display:inline-block;
+	background:#bebebe;
+	color:#747474;
+	padding:6px 9px;
+	margin-right: 5px;
+	border-radius: 5px;
+}
+
+.login_actions a:hover {
+	text-decoration: none;
+	opacity: 0.8;
 }

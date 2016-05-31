@@ -153,7 +153,7 @@ function update_logged_in_user_profile() {
 
   $userInfo = get_userdata( get_current_user_id() );
 
-  $form = '<form class="" action="" method="post">';
+  $form = '<form class="form_account" action="" method="post">';
 
   // $form .= get_current_user_role() == 'manager' ? '<input type="hidden" name="prinskorv" value="lightbulb">' : '';
 
