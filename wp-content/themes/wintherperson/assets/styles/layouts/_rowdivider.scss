@@ -1,20 +1,21 @@
-.row_divider {
+#row_divider {
 	margin-top: 75px;
 }
 
-.row_divider > div{
+#row_divider > div {
 	position: relative;
 	margin:0 auto;
 	height: 11px;
-	width:85%;
+	width:70%;
 	background-image: url("../images/line_middle.png");
 	background-repeat: repeat-x;
 	
 }
 
-.row_divider > div:before {
+#row_divider > div::before {
 	position: absolute;
 	left:-93px;
+	bottom:0;
 	content: " ";
 	height: 11px;
 	width:93px;
@@ -22,9 +23,10 @@
 	background-repeat: no-repeat;
 }
 
-.row_divider > div:after {
+#row_divider > div::after {
 	position: absolute;
 	left:100%;
+	bottom:0;
 	content: " ";
 	height: 11px;
 	width:93px;

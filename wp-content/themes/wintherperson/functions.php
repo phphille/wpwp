@@ -134,8 +134,13 @@ class Products_Widget extends WP_Widget {
 	function getRealtyListings() { //html
 		global $post;
 		add_image_size( 'realty_widget_size', 85, 45, false );
-		$listings = new WP_Query();
-		$listings->query('post_type=products');
+		$args = array('orderby'=>'title');
+		$listings = new WP_Query(array(
+            'post_type'=>'products',
+            'orderby'=>'title',
+            'order'=>'ASC'
+    ));
+		//$listings->query('post_type=products');
 		if($listings->found_posts > 0) {
 			$postno = 0;
 			$row_open = true;
