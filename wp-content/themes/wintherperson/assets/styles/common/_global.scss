@@ -63,16 +63,17 @@
 .korvlador .korv_item {
 	width:30%;
 	float:left;
-	margin-right:1.5%;
-	margin-left:1.5%;
-	
-	padding:20px;
+	margin: 0 1.5% 2%;
 	border: 1px solid #c6c6c6;
 	border-radius: 5px;
 	
 	-webkit-box-shadow: 7px 7px 32px -23px rgba(0,0,0,0.75);
 	-moz-box-shadow: 7px 7px 32px -23px rgba(0,0,0,0.75);
 	box-shadow: 7px 7px 32px -23px rgba(0,0,0,0.75); 
+}
+
+.korvlador .korv_child {
+	padding:20px;
 }
 
 .fullwidth a {

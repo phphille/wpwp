@@ -145,7 +145,7 @@ class Products_Widget extends WP_Widget {
 			$postno = 0;
 			$row_open = true;
 			
-			echo '<div class="korvlador"><div class="korv_row">';
+			echo '<div id="korvlador"><div class="korv_row">';
 				while ($listings->have_posts()) {
 					$postno++;
 					$listItem ="";
@@ -155,10 +155,10 @@ class Products_Widget extends WP_Widget {
 					}
 					$listings->the_post();
 					$image = (has_post_thumbnail($post->ID)) ? get_the_post_thumbnail($post->ID, 'realty_widget_size') : '';
-					$listItem .= '<div class="korv_item">' . $image;
+					$listItem .= '<div class="korv_item panel-grid-cell"><div class="korv_child">' . $image;
 					$listItem .= '<h4>'. get_the_title() . '</h4>';
 					$listItem .= get_the_content();
-					$listItem .= '</div>';
+					$listItem .= '</div></div>';
 					if (($postno % 3) == 0) {
 						$listItem .='</div>';
 						$row_open = false;
