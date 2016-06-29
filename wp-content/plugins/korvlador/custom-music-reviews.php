@@ -102,6 +102,32 @@ function admin_export_to_excel() {
     </select>
 
     <?php if(isset($_POST['assocation']) && is_numeric($_POST['assocation'])) : ?>
+        <br>
+
+        <?php
+          $associationDelegate = get_userdata( $_POST['assocation'] );
+        ?>
+
+        <span>Föreningsansvarig:</span>
+        <table>
+          <tr>
+            <th>Namn</th>
+            <th>Adress</th>
+            <th>Ort</th>
+            <th>Postnummer</th>
+            <th>Telefon</th>
+            <th>Email</th>
+          </tr>
+          <tr>
+            <td><?php echo $associationDelegate->first_name.' '.$associationDelegate->last_name ?></td>
+            <td><?php echo get_user_meta($_POST['assocation'], 'address', true) ?></td>
+            <td><?php echo get_user_meta($_POST['assocation'], 'city', true) ?></td>
+            <td><?php echo get_user_meta($_POST['assocation'], 'zip', true) ?></td>
+            <td><?php echo get_user_meta($_POST['assocation'], 'phone', true) ?></td>
+            <td><?php echo $associationDelegate->user_email ?></td>
+          </tr>
+        </table>
+
       <?php
         $args  = array(
           'role' => 'manager',
@@ -115,12 +141,14 @@ function admin_export_to_excel() {
         $wp_user_query = new WP_User_Query($args);
         $resLeaders = $wp_user_query->get_results();
       ?>
-      <select id="association-team" name="association-team">
+      <select class="admin-select-export-team" name="team-to-export-admin">
         <option value="" disabled="" selected="">Välj ett lag</option>
         <?php foreach ($resLeaders as $resLeader) :?>
           <option value="<?php echo $resLeader->ID; ?>"><?php echo get_user_meta($resLeader->ID, 'team', true); ?></option>
         <?php endforeach;?>
       </select>
+
+
     <?php endif; ?>
 
 
@@ -139,7 +167,7 @@ function admin_export_to_excel() {
 
     <form method="post" action="">
 
-      <select name="teams">
+      <select name="team-to-export-admin" class="admin-select-export-team">
         <option value="" disabled="" selected="">Välj ett lag</option>
         <?php foreach ($resLeaders as $resLeader) :?>
             <?php if(get_user_meta($resLeader->ID, 'associationDelegateParentId', true) == ''): ?>
@@ -168,7 +196,7 @@ function admin_export_to_excel_association(){
   $html = '';
   if(isset($_POST['assocation']) && is_numeric($_POST['assocation']) && wp_verify_nonce($_POST['forening'],'admin_export_to_excel_association')){
     $users = explode(',', get_user_meta($_POST['assocation'], 'userids', true));
-    dump($users);
+    // dump($users);
   }
 
   return $html;

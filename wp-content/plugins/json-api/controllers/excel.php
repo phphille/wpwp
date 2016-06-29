@@ -240,9 +240,9 @@ class JSON_API_Excel_Controller {
     //   $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
     // }
     // var_dump($query);
-   $team = $query['association-team'];
+   $team = $query['team-to-export-admin'];
 
-    $usersIDs = explode(',', get_user_meta($query['association-team'], 'userids', true));
+    $usersIDs = explode(',', get_user_meta($query['team-to-export-admin'], 'userids', true));
 
   	$table = '';
   	if($usersIDs){
@@ -265,7 +265,7 @@ class JSON_API_Excel_Controller {
   		wp_enqueue_style('author-list', plugin_dir_url(__FILE__) . '/css/author-list.css');
 
   		$table .= '
-      <form class="" action="" method="post">
+      <form class="" action="" method="post" id="adminExcelTable">
       <input type="hidden" name="excel-team" value="'.$team.'">
       <table class="table table-hover">
         <tr>

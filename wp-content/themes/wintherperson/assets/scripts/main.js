@@ -101,6 +101,18 @@ $j(document).ready(function(){
     }
   });
 
+
+
+  $j('.create-user-manually').on('click', function(e){
+    e.preventDefault();
+    console.log('hej');
+    $j('html, body').animate({
+        scrollTop: $j('.createFormUser').offset().top
+    },'fast', function() {
+      $j('.createFormUser').show();
+    });
+  });
+
   user.init();
   excel.init();
   updateSoldKorvs.init();

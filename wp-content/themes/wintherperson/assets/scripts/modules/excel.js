@@ -5,14 +5,14 @@ var excel = {
   },
 
   uploadExcel: function() {
-    if($j('.doUploadExcel').length > 0){
+    if($j('#create-user-excel').length > 0){
       var self = this;
-      $j('.doUploadExcel').click(function(e) {
+      $j('#create-user-excel').on('change', function(e) {
         e.preventDefault();
 
         self.getNonce('user', 'create_user')
           .done(function(res) {
-            var formData = new FormData($j('.doUploadExcel').parent()[0]);
+            var formData = new FormData($j('#create-user-excel')[0].form);
             // formData.nonce = res.nonce;
             $j.ajax({
               url: '../api/excel/create_user_by_excel', //Server script to process data

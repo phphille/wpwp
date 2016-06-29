@@ -185,22 +185,59 @@ function export_to_excel_as_admin(){
 
     $objPHPExcel = new PHPExcel();
     $objPHPExcel->setActiveSheetIndex(0);
-    $objPHPExcel->getActiveSheet()->setCellValue('A1', "Namn")->getStyle('A1:F1')->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
-    $objPHPExcel->getActiveSheet()->setCellValue('B1', "Adress");
-    $objPHPExcel->getActiveSheet()->setCellValue('C1', "Postnummer");
-    $objPHPExcel->getActiveSheet()->setCellValue('D1', "Ort");
-    $objPHPExcel->getActiveSheet()->setCellValue('E1', "Telefon");
-    $objPHPExcel->getActiveSheet()->setCellValue('F1', "Sålda lådor totalt");
-    $col = 6;
+    $objPHPExcel->getActiveSheet()->setCellValue('A1', "Lagledare:")->getStyle('A1')->applyFromArray(array(
+        'font'  => array(
+          'bold'  => true,
+        ),
+        // 'alignment' => array(
+        //   'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+        // ),
+      )
+    );
+
+    $objPHPExcel->getActiveSheet()->setCellValue('A2', "Namn")->getStyle('A2:F2')->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValue('B2', "Adress");
+    $objPHPExcel->getActiveSheet()->setCellValue('C2', "Postnummer");
+    $objPHPExcel->getActiveSheet()->setCellValue('D2', "Ort");
+    $objPHPExcel->getActiveSheet()->setCellValue('E2', "Telefon");
+    $objPHPExcel->getActiveSheet()->setCellValue('F2', "E-post");
+
+    $objPHPExcel->getActiveSheet()->setCellValue('A3', $manager->first_name.' '.$manager->last_name);
+    $objPHPExcel->getActiveSheet()->setCellValue('B3', get_user_meta($manager->ID, 'address', true));
+    $objPHPExcel->getActiveSheet()->setCellValue('C3', get_user_meta($manager->ID, 'zip', true));
+    $objPHPExcel->getActiveSheet()->setCellValue('D3', get_user_meta($manager->ID, 'city', true));
+    $objPHPExcel->getActiveSheet()->setCellValue('E3', get_user_meta($manager->ID, 'phone', true));
+    $objPHPExcel->getActiveSheet()->setCellValue('F3', $manager->email);
+
+
+    $objPHPExcel->getActiveSheet()->setCellValue('A6', "Säljare:")->getStyle('A6')->applyFromArray(array(
+        'font'  => array(
+          'bold'  => true,
+        ),
+        // 'alignment' => array(
+        //   'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+        // ),
+      )
+    );
+
+    $objPHPExcel->getActiveSheet()->setCellValue('A7', "ID")->getStyle('A7:H7')->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValue('B7', "Namn");
+    $objPHPExcel->getActiveSheet()->setCellValue('C7', "Adress");
+    $objPHPExcel->getActiveSheet()->setCellValue('D7', "Postnummer");
+    $objPHPExcel->getActiveSheet()->setCellValue('E7', "Ort");
+    $objPHPExcel->getActiveSheet()->setCellValue('F7', "Telefon");
+    $objPHPExcel->getActiveSheet()->setCellValue('G7', "E-post");
+    $objPHPExcel->getActiveSheet()->setCellValue('H7', "Sålda lådor totalt");
+    $col = 8;
     foreach ($korvladsTyper->posts as $typ) {
-      $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 1, $typ->post_title)->getStyleByColumnAndRow($col, 1)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+      $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 7, $typ->post_title)->getStyleByColumnAndRow($col, 7)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
       $products[] = array('artikelNamn' => get_post_meta($typ->ID,'artikelnamn',true), 'pris' => get_post_meta($typ->ID,'pris',true));
       $col++;
     }
-    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 1, "Summa kr")->getStyleByColumnAndRow($col, 1)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
-    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col+1, 1, "Leverans")->getStyleByColumnAndRow($col+1, 1)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
-    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col+2, 1, "Betalt")->getStyleByColumnAndRow($col+2, 1)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
-    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col+3, 1, "Kommentar")->getStyleByColumnAndRow($col+3, 1)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, 7, "Summa kr")->getStyleByColumnAndRow($col, 7)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col+1, 7, "Leverans")->getStyleByColumnAndRow($col+1, 7)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col+2, 7, "Betalt")->getStyleByColumnAndRow($col+2, 7)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col+3, 7, "Kommentar")->getStyleByColumnAndRow($col+3, 7)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
 
 
 
@@ -211,16 +248,19 @@ function export_to_excel_as_admin(){
 
     $salespersonsRow = '';
     $dataArr = [];
+    $companyArr = [];
     foreach($teamSalespersons as $salesperson){
       $dataArr[] = array();
       $index = count($dataArr);
 
       // $salespersonsRow .= '<td><a href="'.get_home_url().'/uppdatera-anvandare/?user='.$salesperson->ID.'">'.$salesperson->first_name.' '.$salesperson->last_name.'</a></td>';
+      $dataArr[($index-1)][] = $salesperson->ID;
       $dataArr[($index-1)][] = $salesperson->first_name.' '.$salesperson->last_name;
       $dataArr[($index-1)][] = get_user_meta($salesperson->ID, 'address', true);
       $dataArr[($index-1)][] = get_user_meta($salesperson->ID, 'zip', true);
       $dataArr[($index-1)][] = get_user_meta($salesperson->ID, 'city', true);
       $dataArr[($index-1)][] = get_user_meta($salesperson->ID, 'phone', true);
+      $dataArr[($index-1)][] = $salesperson->email;
 
       $totalKorvlador = 0;
       $totalSum = 0;
@@ -261,11 +301,12 @@ function export_to_excel_as_admin(){
 
       $companies = new WP_Query($args);
       if(!empty($companies->posts)){
-        $dataArr[($index-1)][] = array();
-        $indexCompanyArr = count($dataArr[($index-1)]);
+        // $dataArr[($index-1)][] = array();
+        // $indexCompanyArr = count($dataArr[($index-1)]);
 
         foreach($companies->posts as $company){
-          $dataArr[($index-1)][$indexCompanyArr][] = array(
+          $companyArr[] = array(
+            $salesperson->ID,
             get_post_meta($company->ID, 'companyName', true),
             get_post_meta($company->ID, 'companyOrgNbr', true),
             get_post_meta($company->ID, 'companyAddress', true),
@@ -284,50 +325,52 @@ function export_to_excel_as_admin(){
       }
     }
 
-    $row = 2;
+    $row = 8;
     foreach ($dataArr as $arr) {
       $col = 0;
       foreach ($arr as $value) {
-        if(is_array($value)){
-          foreach ($value as $company) {
-            $row++;
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, 'Företag:')->getStyleByColumnAndRow(0, $row)->applyFromArray(array(
-                'font'  => array(
-                  'bold'  => true,
-                ),
-                'alignment' => array(
-                  'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
-                ),
-              )
-            );
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, 'Namn')->getStyleByColumnAndRow(1, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, 'Organisationsnummer')->getStyleByColumnAndRow(2, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, 'Address')->getStyleByColumnAndRow(3, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, 'Ort')->getStyleByColumnAndRow(4, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, 'Postnummer')->getStyleByColumnAndRow(5, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, 'E-post')->getStyleByColumnAndRow(6, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, 'Kontakt Förnamn')->getStyleByColumnAndRow(7, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, 'Kontakt Efternamn')->getStyleByColumnAndRow(8, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, 'Kontakt Telefon')->getStyleByColumnAndRow(9, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, 'Leverans Förnamn')->getStyleByColumnAndRow(10, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $row, 'Leverans Efternamn')->getStyleByColumnAndRow(11, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $row, 'Leverans Telefon')->getStyleByColumnAndRow(12, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
-            $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(13, $row, 'Vill ha utkörning')->getStyleByColumnAndRow(13, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
-            $row++;
-            $col = 1;
-            foreach ($company as $companyVal) {
-              $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $companyVal);
-              $col++;
-            }
-            // $row++;
-          }
-        }
-        else {
-          $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $value);
-        }
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $value);
         $col++;
       }
       $row++;
+    }
+
+
+    $row++;
+    $row++;
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, 'Företag:')->getStyleByColumnAndRow(0, $row)->applyFromArray(array(
+        'font'  => array(
+          'bold'  => true,
+        ),
+        // 'alignment' => array(
+        //   'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+        // ),
+      )
+    );
+    $row++;
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, 'ID säljare')->getStyleByColumnAndRow(0, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, 'Namn')->getStyleByColumnAndRow(1, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, 'Organisationsnummer')->getStyleByColumnAndRow(2, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, 'Address')->getStyleByColumnAndRow(3, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, 'Ort')->getStyleByColumnAndRow(4, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, 'Postnummer')->getStyleByColumnAndRow(5, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, 'E-post')->getStyleByColumnAndRow(6, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, 'Kontakt Förnamn')->getStyleByColumnAndRow(7, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, 'Kontakt Efternamn')->getStyleByColumnAndRow(8, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, 'Kontakt Telefon')->getStyleByColumnAndRow(9, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, 'Leverans Förnamn')->getStyleByColumnAndRow(10, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(11, $row, 'Leverans Efternamn')->getStyleByColumnAndRow(11, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(12, $row, 'Leverans Telefon')->getStyleByColumnAndRow(12, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(13, $row, 'Vill ha utkörning')->getStyleByColumnAndRow(13, $row)->applyFromArray(array('fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,'color' => array('rgb' => '689fff'))));
+    $row++;
+    foreach ($companyArr as $company) {
+      $col = 0;
+      foreach ($company as $companyVal) {
+        // dump($companyVal);
+        $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($col, $row, $companyVal);
+        $col++;
+      }
+      // $row++;
     }
 
     // $managerRow = '<tr>';

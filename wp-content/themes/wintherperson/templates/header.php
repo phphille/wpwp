@@ -17,6 +17,7 @@
       ';
     }
 
+    $loggedInmMenu .= '<a href="hem-inloggad">Hem</a>';
     $loggedInmMenu .= '<a href="konto">Konto</a>';
   }
 
@@ -57,7 +58,7 @@
 			}
     }
 			?>
-			
+
       <nav class="navbar navbar-default" role="navigation">
       <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -65,7 +66,7 @@
 					<div id="header-logo" class="visible-sm visible-xs header-logo_mobile">
 						<a href="#"><img class="img-responsive" src="<?php echo $header_logo; ?>" alt="wp logo"></a>
 				</div>
-					
+
 					<div id="header-logo" class="hidden-sm hidden-xs header-logo_nonmobile">
 						<a href="#"><img class="img-responsive" src="<?php echo $header_logo; ?>" alt="wp logo"></a>
 				</div>

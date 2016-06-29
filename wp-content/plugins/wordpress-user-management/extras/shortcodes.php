@@ -51,7 +51,7 @@ function create_user_form($updateId) {
       );
       $wp_user_query = new WP_User_Query($args);
       $resManagers = $wp_user_query->get_results();
-      dump($resManagers);
+      // dump($resManagers);
 
       $form .= '<select class="" name="prinskorv">
           <option value="" disabled="disabled" selected="selected">Välj användartyp</option>
@@ -97,48 +97,63 @@ function create_user_form($updateId) {
 
 
     $form .= '
-      <label for="">Användarnamn</label>
-      <input type="text" name="user_login" value="'.($updateId != '' ? $userToUpdate->user_login : '').'">
+      <div class="form-group">
+        <label for="">Användarnamn</label>
+        <input type="text" class="form-control" name="user_login" value="'.($updateId != '' ? $userToUpdate->user_login : '').'" placeholder="Användarnamn">
+      </div>
 
-      <label for="">E-postadress</label>
-      <input type="text" name="user_email" value="'.($updateId != '' ? $userToUpdate->user_email : '').'">
+      <div class="form-group">
+        <label for="">E-postadress</label>
+        <input type="text" class="form-control" name="user_email" value="'.($updateId != '' ? $userToUpdate->user_email : '').'" placeholder="E-postadress">
+      </div>
 
-      <label for="">Förnamn</label>
-      <input type="text" name="first_name" value="'.($updateId != '' ? $userToUpdate->first_name : '').'">
+      <div class="form-group">
+        <label for="">Förnamn</label>
+        <input type="text" class="form-control" name="first_name" value="'.($updateId != '' ? $userToUpdate->first_name : '').'" placeholder="Förnamn">
+      </div>
 
-      <label for="">Efternamn</label>
-      <input type="text" name="last_name" value="'.($updateId != '' ? $userToUpdate->last_name : '').'">
+      <div class="form-group">
+        <label for="">Efternamn</label>
+        <input type="text" class="form-control" name="last_name" value="'.($updateId != '' ? $userToUpdate->last_name : '').'" placeholder="Efternamn">
+      </div>
 
-      <label for="">Adress</label>
-      <input type="text" name="address" value="'.($updateId != '' ? get_user_meta($userToUpdate->ID, 'address', true) : '').'">
+      <div class="form-group">
+        <label for="">Adress</label>
+        <input type="text" class="form-control" name="address" value="'.($updateId != '' ? get_user_meta($userToUpdate->ID, 'address', true) : '').'" placeholder="Adress">
+      </div>
 
-      <label for="">Postnummer</label>
-      <input type="text" name="zip" value="'.($updateId != '' ? get_user_meta($userToUpdate->ID, 'zip', true) : '').'">
+      <div class="form-group">
+        <label for="">Postnummer</label>
+        <input type="text" class="form-control" name="zip" value="'.($updateId != '' ? get_user_meta($userToUpdate->ID, 'zip', true) : '').'" placeholder="Postnummer">
+      </div>
 
-      <label for="">Stad</label>
-      <input type="text" name="city" value="'.($updateId != '' ? get_user_meta($userToUpdate->ID, 'city', true) : '').'">
+      <div class="form-group">
+        <label for="">Stad</label>
+        <input type="text" class="form-control" name="city" value="'.($updateId != '' ? get_user_meta($userToUpdate->ID, 'city', true) : '').'" placeholder="Stad">
+      </div>
 
-      <label for="">Telefonnummer</label>
-      <input type="text" name="phone" value="'.($updateId != '' ? get_user_meta($userToUpdate->ID, 'phone', true) : '').'">
+      <div class="form-group">
+        <label for="">Telefonnummer</label>
+        <input type="text" class="form-control" name="phone" value="'.($updateId != '' ? get_user_meta($userToUpdate->ID, 'phone', true) : '').'" placeholder="Telefonnummer">
+      </div>
 
       <input type="submit" value="'.($updateId != '' ? 'Uppdatera' : 'Skapa').'" class="'.($updateId != '' ? 'doUpdateUser' : 'doCreateUser').'">
     </form>';
 
   }
 
-  if($updateId == ''){
-    $form .= '<form class="" action="'.admin_url('admin-ajax.php').'" method="post" enctype="multipart/form-data">
-      '.wp_nonce_field('create_user_by_excel','ny-korvare').'
-      <input name="action" value="create_user_by_excel" type="hidden">
-    	Skapa användare med excelfil: <input type="file" name="file" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
-    	<input type="submit" name="submit" value="Submit" class="doUploadExcel" />
-    </form>';
-  }
+  // if($updateId == ''){
+  //   $form .= '<form class="" action="'.admin_url('admin-ajax.php').'" method="post" enctype="multipart/form-data">
+  //     '.wp_nonce_field('create_user_by_excel','ny-korvare').'
+  //     <input name="action" value="create_user_by_excel" type="hidden">
+  //   	Skapa användare med excelfil: <input type="file" name="file" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+  //   	<input type="submit" name="submit" value="Submit" class="doUploadExcel" />
+  //   </form>';
+  // }
 
   return $form;
 }
 add_shortcode('getCreateFormUser', 'create_user_form');
-
 
 
 

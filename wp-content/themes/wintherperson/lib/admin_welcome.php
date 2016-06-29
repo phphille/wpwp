@@ -1,10 +1,10 @@
 <?php
 
 
-function custom_post_faq() {
+function custom_post_welcome() {
   global $custom_meta_fields;
-  $prefix = 'faq_';
-  $custom_meta_fields['faq'] = array(
+  $prefix = 'welcome_';
+  $custom_meta_fields['welcome'] = array(
       // array(
       //     'label'=> 'Typ',
       //     'desc'  => '',
@@ -16,23 +16,19 @@ function custom_post_faq() {
       array(
           'label'=> 'Typ av användare',
           'desc'  => 'För vilken typ av användare ska se innehållet',
-          'id'    => 'faq-type',
+          'id'    => 'welcome-type',
           'name' => 'type',
           'type'  => 'select',
           'options' => array (
               'one' => array (
-                  'label' => 'Alla',
-                  'value' => 'all'
-              ),
-              'two' => array (
                   'label' => 'Föreningsansvarig',
                   'value' => 'Föreningsansvarig'
               ),
-              'three' => array (
+              'two' => array (
                   'label' => 'Lagledare',
                   'value' => 'Lagledare'
               ),
-              'four' => array (
+              'three' => array (
                   'label' => 'Säljare',
                   'value' => 'Säljare'
               )
@@ -42,67 +38,67 @@ function custom_post_faq() {
 
 
   $labels = array(
-    'name'               => __( 'FAQ'),
-    'singular_name'      => __( 'FAQ'),
-    'add_new'            => __( 'Skriv FAQ' ),
-    'add_new_item'       => __( 'Skriv FAQ' ),
-    'edit_item'          => __( 'Uppdatera FAQ' ),
-    'new_item'           => __( 'Ny FAQ' ),
-    'all_items'          => __( 'FAQ' ),
-    'view_item'          => __( 'Se FAQ' ),
+    'name'               => __( 'Välkomsttexter'),
+    'singular_name'      => __( 'Välkomsttext'),
+    'add_new'            => __( 'Skriv välkomsttext' ),
+    'add_new_item'       => __( 'Skriv välkomsttext' ),
+    'edit_item'          => __( 'Uppdatera välkomsttext' ),
+    'new_item'           => __( 'Ny välkomsttext' ),
+    'all_items'          => __( 'Välkomsttexter' ),
+    'view_item'          => __( 'Se välkomsttext' ),
     'search_items'       => __( '' ),
     'not_found'          => __( '' ),
     'not_found_in_trash' => __( '' ),
     'parent_item_colon'  => '',
-    'menu_name'          => 'FAQ'
+    'menu_name'          => 'Välkomsttexter'
   );
   $args = array(
     'labels'              => $labels,
-    'description'         => 'FAQ',
+    'description'         => 'Välkomsttexter',
     'public'              => true,
     'publicly_queryable'  => false,
     'menu_position'       => 5,
     'has_archive'         => false,
     'exclude_from_search' => true,
-    'supports'            => array( 'title', 'editor' )
+    'supports'            => array('editor' )
   );
-  register_post_type( 'faq', $args );
+  register_post_type( 'welcome', $args );
 }
-add_action( 'init', 'custom_post_faq' );
+add_action( 'init', 'custom_post_welcome' );
 
 
 
 
 // Add the Meta Box
-function add_custom_meta_box_faq() {
+function add_custom_meta_box_welcome() {
     add_meta_box(
-      'faq_metabox', // $id
+      'welcome_metabox', // $id
       'Användare', // $title
       'show_custom_meta_box', // $callback
-      'faq', // $page
+      'welcome', // $page
       'normal', // $context
       'high'); // $priority
 }
-add_action('add_meta_boxes_faq', 'add_custom_meta_box_faq');
+add_action('add_meta_boxes_welcome', 'add_custom_meta_box_welcome');
 
 
 
 
 
 // ADD NEW COLUMN
-function faq_columns_head($defaults) {
-  $defaults['faq_type'] = 'För vilken typ av användare';
+function welcome_columns_head($defaults) {
+  $defaults['welcome_type'] = 'För vilken typ av användare';
   return $defaults;
 }
 
-function faq_columns_contents($column_name, $post_ID) {
-    if ($column_name == 'faq_type') {
+function welcome_columns_contents($column_name, $post_ID) {
+    if ($column_name == 'welcome_type') {
       echo get_post_meta ( $post_ID, 'type', true );
     }
 }
 
-add_filter('manage_faq_posts_columns', 'faq_columns_head');
-add_action('manage_faq_posts_custom_column', 'faq_columns_contents', 5, 2);
+add_filter('manage_welcome_posts_columns', 'welcome_columns_head');
+add_action('manage_welcome_posts_custom_column', 'welcome_columns_contents', 10, 2);
 
 
 

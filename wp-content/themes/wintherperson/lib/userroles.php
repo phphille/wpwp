@@ -7,7 +7,7 @@
 add_action( 'admin_init', 'redirect_non_admin_users' );
 function redirect_non_admin_users() {
 	if ( ! current_user_can( 'manage_options' ) && '/wpkorv/wp-admin/admin-ajax.php' != $_SERVER['PHP_SELF'] ) {
-		wp_redirect( 'konto' );
+		wp_redirect( 'hem-inloggad' );
 		exit;
 	}
 }

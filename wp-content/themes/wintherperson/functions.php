@@ -25,6 +25,7 @@ $sage_includes = [
   'lib/admin_products.php',
   'lib/admin_companies.php',
   'lib/admin_lock-orders.php',
+  'lib/admin_welcome.php',
   'lib/admin_faq.php',
   'lib/korvlador.php',
   'lib/phpexcel-1.8/classes/phpexcel.php'

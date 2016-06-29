@@ -7,9 +7,9 @@
       },
 
       createUser: function() {
-        if ($("#association-team").length > 0) {
+        if ($(".admin-select-export-team").length > 0) {
           var self = this;
-          $("#association-team").on('change', function(e) {
+          $(".admin-select-export-team").on('change', function(e) {
             e.preventDefault();
             self.postData($(this).parent().serializeArray(), 'excel', 'get_table_for_excel_admin');
           });
@@ -44,6 +44,7 @@
         .done(function(msg) {
           console.log('done:');
           console.log(msg);
+          $('#adminExcelTable').remove();
           $(msg).appendTo('#wpbody-content .wrap');
         })
         .fail(function(jqXHR, textStatus, errorThrown ){
