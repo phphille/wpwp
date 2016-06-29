@@ -1,16 +1,81 @@
-body {
-	font-family: Arial;
-}
-
 .displayNoneOnInit{
   display: none;
 }
 
 .container {
-	padding-left: 60px;
-	padding-right: 60px;
+	padding-left: 40px;
+	padding-right: 40px;
+}
+
+.wrap.container {
+	padding-bottom: 60px;
+}
+
+.wrap {
+	padding-top: 20px;
 }
 
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > .active > a:hover {
+}
+
+.headerbonus {
+	margin-top: 25px;
+}
+
+.headerbonus li {
+	margin-bottom: 10px;
+	font-size: 16px;
+}
+
+.headline_black {
+	display: block;
+	background: #000000;
+	color:#FFFFFF;
+	padding:15px 15px 13px;
+}
+
+.headline_black h3 {
+	margin:0;
+}
+
+.vinnare_bild {
+	width:50%;
+	height:auto;
+}
+
+.rounded_box {
+	border:1px solid grey;
+	border-radius: 5px;
+	padding: 20px;
+}
+
+.korvlador {
+	margin-left:-1.5%;
+	margin-right: -1.5%;
+}
+
+.korv_row {
+	padding-bottom: 30px;
+	overflow: auto;
+}
+
+.korvlador .korv_item {
+	width:30%;
+	float:left;
+	margin: 0 1.5% 2%;
+	border: 1px solid #c6c6c6;
+	border-radius: 5px;
+	
+	-webkit-box-shadow: 7px 7px 32px -23px rgba(0,0,0,0.75);
+	-moz-box-shadow: 7px 7px 32px -23px rgba(0,0,0,0.75);
+	box-shadow: 7px 7px 32px -23px rgba(0,0,0,0.75); 
+}
+
+.korvlador .korv_child {
+	padding:20px;
+}
+
+.fullwidth a {
+	//width:100%;
 }

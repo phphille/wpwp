@@ -5,7 +5,7 @@ function my_custom_post_product() {
   global $custom_meta_fields;
   $prefix = 'product_';
   $custom_meta_fields['products'] = array(
-      array(
+			array(
           'label'=> 'Ange pris',
           'desc'  => '',
           'id'    => '',
@@ -58,7 +58,7 @@ add_action( 'init', 'my_custom_post_product' );
 function add_custom_meta_box_product() {
     add_meta_box(
         'product_metabox', // $id
-        'Pris', // $title
+        'Editera korvlåda', // $title
         'show_custom_meta_box', // $callback
         'products', // $page
         'normal', // $context

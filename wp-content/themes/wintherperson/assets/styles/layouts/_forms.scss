@@ -1,0 +1,84 @@
+input[type="submit"], .page_linkbtn a, .pdf_linkbtn a {
+	font-weight: 600;
+	padding:12px;
+	border-radius: 5px;
+	color: #FFFFFF;
+	display: inline-block;
+	margin: 0;
+	
+	-webkit-box-shadow: 3px 3px 32px -23px rgba(0,0,0,0.75);
+	-moz-box-shadow: 3px 3px 32px -23px rgba(0,0,0,0.75);
+	box-shadow: 3px 3px 32px -23px rgba(0,0,0,0.75);
+}
+
+.page_linkbtn a {
+	background: #3c3c3c;
+}
+
+.pdf_linkbtn a, input[type="submit"] {
+	background: #910b26;
+}
+
+input[type="submit"] {
+	border:0;
+	min-width: 80px;
+	
+}
+
+.page_linkbtn a:hover, .pdf_linkbtn a:hover, input[type="submit"]:hover {
+	text-decoration: none;
+	opacity: 0.8;
+}
+
+input[type="text"],input[type="number"], input[type="password"], textarea {
+	border-radius: 5px;
+	background:#fafafa;
+	border:1px solid #c6c6c6;
+	padding:6px 10px;
+	
+	box-sizing: padding-box;
+	
+	-webkit-box-shadow: inset 2px 2px 6px -4px rgba(0,0,0,0.2);
+	-moz-box-shadow: inset 2px 2px 6px -4px rgba(0,0,0,0.2);
+	box-shadow: inset 2px 2px 6px -4px rgba(0,0,0,0.2);
+}
+
+.contact_form_text {
+	margin:0;
+}
+
+.form_account .input-group {
+	margin-bottom: 15px;
+}
+
+.form_account .input-group label {
+	margin-bottom: 2px;
+}
+
+#panel-6-1-2-2.so-panel {
+	margin: 0;
+}
+
+//BOKNING
+#ninja_forms_form_6_all_fields_wrap > div { 
+	margin-bottom: 15px;
+}
+
+#ninja_forms_form_6_all_fields_wrap label { 
+	font-size: 0.9em;
+	margin:0;
+}
+
+
+#ninja_forms_field_19_div_wrap, #ninja_forms_field_20_div_wrap {
+	display: inline-block;
+}
+
+#ninja_forms_field_19_div_wrap {
+	width:35%;
+	margin-right: 4%;
+}
+
+#ninja_forms_field_20_div_wrap {
+	width: 60%;
+}

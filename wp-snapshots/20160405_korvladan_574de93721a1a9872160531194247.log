@@ -1,0 +1,75 @@
+********************************************************************************
+PACKAGE-LOG: 2016-05-31 19:43:53
+NOTICE: Do NOT post to public sites or forums 
+********************************************************************************
+VERSION:	1.1.6
+WORDPRESS:	4.4.2
+PHP INFO:	5.6.10 | SAPI: apache2handler
+SERVER:		Apache/2.2.29 (Unix) mod_wsgi/3.5 Python/2.7.10 PHP/5.6.10 mod_ssl/2.2.29 OpenSSL/0.9.8zg DAV/2 mod_fastcgi/2.4.6 mod_perl/2.0.9 Perl/v5.22.0 
+PHP TIME LIMIT: (0) no time limit imposed 
+PHP MAX MEMORY: 5000M (128M default) 
+MEMORY STACK: 38MB 
+
+********************************************************************************
+DATABASE:
+********************************************************************************
+BUILD MODE:   PHP(query limit - 100)
+MYSQLTIMEOUT: 5000
+MYSQLDUMP:    Not Supported 
+TABLES: total:25 | filtered:0 | create:25 
+FILTERED: [] 
+SQL CREATED: 20160405_korvladan_574de93721a1a9872160531194247_database.sql 
+SQL FILE SIZE: 1.6MB (1676088) 
+SQL FILE TIME: 2016-05-31 19:43:53 
+SQL RUNTIME: 0.36 sec. 
+
+******************************************************************************** 
+ARCHIVE (ZIP): 
+******************************************************************************** 
+ARCHIVE DIR:  /Applications/MAMP/htdocs/wpkorv 
+ARCHIVE FILE: 20160405_korvladan_574de93721a1a9872160531194247_archive.zip 
+FILTERS: *OFF* 
+DIRS:  not set 
+EXTS:  not set 
+---------------------------------------- 
+COMPRESSING 
+SIZE:	209.3MB 
+STATS:	Dirs 4,045 | Files 29,885 
+SQL ADDED: 20160405_korvladan_574de93721a1a9872160531194247_database.sql 
+ZipArchive Object
+(
+    [status] => 0
+    [statusSys] => 0
+    [numFiles] => 33930
+    [filename] => /Applications/MAMP/htdocs/wpkorv/wp-snapshots/tmp/20160405_korvladan_574de93721a1a9872160531194247_archive.zip
+    [comment] => 
+)
+ 
+COMPRESSION RESULT: '1' 
+COMPRESSED SIZE: 98.34MB 
+ARCHIVE RUNTIME: 236.02 sec. 
+MEMORY STACK: 51.25MB 
+
+******************************************************************************** 
+MAKE INSTALLER: 
+******************************************************************************** 
+Build Start 
+Build Finished 
+Preping for use 
+Template parsed with new data 
+Complete [/Applications/MAMP/htdocs/wpkorv/wp-snapshots/tmp/20160405_korvladan_574de93721a1a9872160531194247_installer.php] 
+Added to archive 
+
+******************************************************************************** 
+INTEGRITY CHECKS: 
+******************************************************************************** 
+SQL File: 1.6MB 
+Installer File: 319.26KB 
+Archive File: 98.34MB  
+
+********************************************************************************
+RECORD ID:[1]
+TOTAL PROCESS RUNTIME: 245.03 sec.
+PEAK PHP MEMORY USED: 59MB
+DONE PROCESSING => 20160405_korvladan 2016-05-31 19:47:58
+ 

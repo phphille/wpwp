@@ -20,7 +20,7 @@ $sage_includes = [
   'lib/dashboard.php',
   'lib/userroles.php',
   'lib/userprofiles.php',
-  'lib/postrequests.php',
+  'lib/postRequests.php',
   'lib/admin_custom-post-functions.php',
   'lib/admin_products.php',
   'lib/admin_companies.php',
@@ -28,7 +28,7 @@ $sage_includes = [
   'lib/admin_welcome.php',
   'lib/admin_faq.php',
   'lib/korvlador.php',
-  'lib/phpexcel-1.8/classes/phpexcel.php'
+  'lib/PHPExcel-1.8/Classes/PHPExcel.php'
 ];
 
 foreach ($sage_includes as $file) {
@@ -106,6 +106,79 @@ function checkOrgNbr($nummer) { // $nummer ska vara på formen YYMMDDXXXK
       return false;
    }
 }
+
+
+class Products_Widget extends WP_Widget {
+	function __construct() {
+		parent::__construct(
+			'products_widget', // Base ID
+			'Korvlådor', // Name
+			array('description' => __( 'Visar alla korvlådor'))
+			 );
+	}
+	
+	function update($new_instance, $old_instance) {
+		$instance = $old_instance;
+		$instance['title'] = strip_tags($new_instance['title']);
+		$instance['numberOfListings'] = strip_tags($new_instance['numberOfListings']);
+		return $instance;
+	}
+
+	
+	function widget($args, $instance) {
+			extract( $args );
+			echo $before_widget;
+			$this->getRealtyListings();
+			echo $after_widget;
+	}
+	
+	function getRealtyListings() { //html
+		global $post;
+		add_image_size( 'realty_widget_size', 85, 45, false );
+		$args = array('orderby'=>'title');
+		$listings = new WP_Query(array(
+            'post_type'=>'products',
+            'orderby'=>'title',
+            'order'=>'ASC'
+    ));
+		//$listings->query('post_type=products');
+		if($listings->found_posts > 0) {
+			$postno = 0;
+			$row_open = true;
+			
+			echo '<div id="korvlador"><div class="korv_row">';
+				while ($listings->have_posts()) {
+					$postno++;
+					$listItem ="";
+					if (!$row_open) {
+						$listItem .='<div class="korv_row">';
+						$row_open = true;
+					}
+					$listings->the_post();
+					$image = (has_post_thumbnail($post->ID)) ? get_the_post_thumbnail($post->ID, 'realty_widget_size') : '';
+					$listItem .= '<div class="korv_item panel-grid-cell"><div class="korv_child">' . $image;
+					$listItem .= '<h4>'. get_the_title() . '</h4>';
+					$listItem .= get_the_content();
+					$listItem .= '</div></div>';
+					if (($postno % 3) == 0) {
+						$listItem .='</div>';
+						$row_open = false;
+					}
+					echo $listItem;
+				}
+				if ($row_open) {
+						$listItem .='</div>';
+				}
+			echo '</div>';
+			wp_reset_postdata();
+		}else{
+			echo '<p style="padding:25px;">Inga korvlådor</p>';
+		}
+}
+
+	
+} //end class Products_Widget
+register_widget('Products_Widget');
 
 
 function my_enqueue($hook) {
