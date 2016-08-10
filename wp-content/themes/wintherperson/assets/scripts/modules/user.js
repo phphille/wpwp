@@ -13,6 +13,9 @@ var user = {
       var self = this;
       $j('.doCreateUser').on('click', function(e){
         e.preventDefault();
+        console.log(formvalidation.formIsValid());
+        if(!formvalidation.formIsValid()) return false;
+
         self.postData($j(this).parent().serializeArray(), 'user', 'create_user');
       });
     }
@@ -23,8 +26,10 @@ var user = {
       var self = this;
       $j('.doUpdateUser').on('click', function(e){
         e.preventDefault();
-        self.postData($j(this).parent().serializeArray(), 'user', 'update_user');
+        console.log(formvalidation.formIsValid());
+        if(!formvalidation.formIsValid()) return false;
 
+        self.postData($j(this).parent().serializeArray(), 'user', 'update_user');
       });
     }
   },
@@ -34,8 +39,10 @@ var user = {
       var self = this;
       $j('.doUpdateLoggedInUser').on('click', function(e){
         e.preventDefault();
-        self.postData($j(this).parent().serializeArray(), 'user', 'update_loggedin_user');
 
+        if(!formvalidation.formIsValid()) return false;
+
+        self.postData($j(this).parent().serializeArray(), 'user', 'update_loggedin_user');
       });
     }
   },

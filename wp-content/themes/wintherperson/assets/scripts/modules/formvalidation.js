@@ -17,10 +17,10 @@ var formvalidation = {
       $j('form input[name*="postalcode"]').each(function(){
         $j(this).on('blur', function() {
           if(/^[0-9]{3}[ ]?[0-9]{2}$/.test(this.value)){
-            console.log('postalcode OK');
+            $j(this).parent().removeClass('has-error');
           }
           else {
-            console.log('postalcode FEL');
+            $j(this).parent().addClass('has-error');
           }
         });
       });
@@ -30,23 +30,36 @@ var formvalidation = {
       $j('form input[name*="email"]').each(function(){
         $j(this).on('blur', function() {
           if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.value)){
-            console.log('email OK');
+            $j(this).parent().removeClass('has-error');
           }
           else {
-            console.log('email FEL');
+            $j(this).parent().addClass('has-error');
           }
         });
       });
     }
 
-    if($j('form input[name*="name"]:not([name="company_name"])').length > 0){
-      $j('form input[name*="name"]:not([name="company_name"])').each(function(){
+    if($j('form input[name*="name"]:not([name="companyname"])').length > 0){
+      $j('form input[name*="name"]:not([name="companyname"])').each(function(){
         $j(this).on('blur', function() {
-          if(/[¤¢£¥¦§©ª«¬®¯°±²³µ¶¸¹º»¼½¾¿Þßþƒ†‡•…‰€™☺○♀♂♪♫◙↨☼►◄↕‼▬↑↓→←∟↔▲▼☻♥♦♣♠◘╚╔╩╦╠═╬¡░▒▓│┤╣║╗╝┐└┴┬├─┼▄█┌┘ı▀シ⌂~!@#_\$%\^&\*\(\)=\+\|\[\]\{\};\\:\",\<\>\?\/0-9]+/.test(this.value)){
-            console.log('name(not company_name) OK');
+          if(!/[¤¢£¥¦§©ª«¬®¯°±²³µ¶¸¹º»¼½¾¿Þßþƒ†‡•…‰€™☺○♀♂♪♫◙↨☼►◄↕‼▬↑↓→←∟↔▲▼☻♥♦♣♠◘╚╔╩╦╠═╬¡░▒▓│┤╣║╗╝┐└┴┬├─┼▄█┌┘ı▀シ⌂~!@#_\$%\^&\*\(\)=\+\|\[\]\{\};\\:\",\<\>\?\/0-9]+/.test(this.value) && this.value.trim() !== ''){
+            $j(this).parent().removeClass('has-error');
           }
           else {
-            console.log('name(not company_name) FEL');
+            $j(this).parent().addClass('has-error');
+          }
+        });
+      });
+    }
+
+    if($j('form input[name="user_login"]').length > 0){
+      $j('form input[name="user_login"]').each(function(){
+        $j(this).on('blur', function() {
+          if(!/[¤¢£¥¦§©ª«¬®¯°±²³µ¶¸¹º»¼½¾¿Þßþƒ†‡•…‰€™☺○♀♂♪♫◙↨☼►◄↕‼▬↑↓→←∟↔▲▼☻♥♦♣♠◘╚╔╩╦╠═╬¡░▒▓│┤╣║╗╝┐└┴┬├─┼▄█┌┘ı▀シ⌂~!@#_\$%\^&\*\(\)=\+\|\[\]\{\};\\:\",\<\>\?\/]+/.test(this.value) && this.value.trim() !== ''){
+            $j(this).parent().removeClass('has-error');
+          }
+          else {
+            $j(this).parent().addClass('has-error');
           }
         });
       });
@@ -56,10 +69,10 @@ var formvalidation = {
       $j('form input[name*="address"]').each(function(){
         $j(this).on('blur', function() {
           if(/^([a-zåäöüàáâãäåæçèéêëìíîïñòóôõöøùúûüÿA-ZÅÄÖÜÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜß0-9]{1}[a-zåäöüàáâãäåæçèéêëìíîïñòóôõöøùúûüÿA-ZÅÄÖÜÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜß0-9.,:\-/()& ]{1,})$/.test(this.value)){
-            console.log('adderess OK');
+            $j(this).parent().removeClass('has-error');
           }
           else {
-            console.log('address FEL');
+            $j(this).parent().addClass('has-error');
           }
         });
       });
@@ -69,10 +82,10 @@ var formvalidation = {
       $j('form input[name*="city"]').each(function(){
         $j(this).on('blur', function() {
           if(/^([a-zåäöüàáâãäåæçèéêëìíîïñòóôõöøùúûüÿA-ZÅÄÖÜÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜß0-9]{1}[a-zåäöüàáâãäåæçèéêëìíîïñòóôõöøùúûüÿA-ZÅÄÖÜÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜß0-9\- ]{1,})$/.test(this.value)){
-            console.log('city OK');
+            $j(this).parent().removeClass('has-error');
           }
           else {
-            console.log('city FEL');
+            $j(this).parent().addClass('has-error');
           }
         });
       });
@@ -83,10 +96,10 @@ var formvalidation = {
         $j('form input[name*="phone"]').each(function(){
           $j(this).on('blur', function() {
             if(/^[0-9+ \-]{1,}$/.test(this.value)){
-              console.log('phone OK');
+              $j(this).parent().removeClass('has-error');
             }
             else {
-              console.log('phone FEL');
+              $j(this).parent().addClass('has-error');
             }
           });
         });
@@ -97,10 +110,10 @@ var formvalidation = {
       $j('form input[name="password2"]').each(function(){
         $j(this).on('blur', function() {
           if(this.value === $j('form input[name="password"]').val()){
-            console.log('passwordsssss OK');
+            $j(this).parent().removeClass('has-error');
           }
           else {
-            console.log('passwordsssss FEL');
+            $j(this).parent().addClass('has-error');
           }
         });
       });
@@ -110,26 +123,193 @@ var formvalidation = {
       $j('form input[name="passwordCurrent"]').each(function() {
         $j(this).on('blur', function() {
           if(this.value.trim() !== '' ){
-            console.log('passwordCurrent OK');
+            $j(this).parent().removeClass('has-error');
           }
           else {
-            console.log('passwordCurrent FEL');
+            $j(this).parent().addClass('has-error');
           }
         });
       });
     }
 
-    if($j('form input[name="company_name"]').length > 0){
-      $j('form input[name="company_name"]').each(function() {
+    if($j('form input[name="companyname"]').length > 0){
+      $j('form input[name="companyname"]').each(function() {
         $j(this).on('blur', function() {
           if(/^([a-zåäöüàáâãäåæçèéêëìíîïñòóôõöøùúûüÿA-ZÅÄÖÜÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜß0-9]{1}[a-zåäöüàáâãäåæçèéêëìíîïñòóôõöøùúûüÿA-ZÅÄÖÜÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜß0-9.,?:\-/()&+– ]{1,})$/.test(this.value)){
-            console.log('company_name');
+            $j(this).parent().removeClass('has-error');
           }
           else {
-            console.log('company_name');
+            $j(this).parent().addClass('has-error');
           }
         });
       });
     }
+  },
+
+  formIsValid: function(){
+    var valid = true;
+    var topValues = [];
+
+    if($j('form input[name*="postalcode"]').length > 0){
+      $j('form input[name*="postalcode"]').each(function(){
+        if(/^[0-9]{3}[ ]?[0-9]{2}$/.test(this.value)){
+          $j(this).parent().removeClass('has-error');
+        }
+        else {
+          $j(this).parent().addClass('has-error');
+          valid = false;
+          topValues.push($j(this).parent().offset().top);
+          console.log('postal');
+        }
+      });
+    }
+
+    if($j('form input[name*="email"]').length > 0){
+      $j('form input[name*="email"]').each(function(){
+        if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.value)){
+          $j(this).parent().removeClass('has-error');
+        }
+        else {
+          $j(this).parent().addClass('has-error');
+          valid = false;
+          topValues.push($j(this).parent().offset().top);
+          console.log('email');
+        }
+      });
+    }
+
+    if($j('form input[name*="name"]:not([name="companyname"])').length > 0){
+      $j('form input[name*="name"]:not([name="companyname"])').each(function(){
+        if(!/[¤¢£¥¦§©ª«¬®¯°±²³µ¶¸¹º»¼½¾¿Þßþƒ†‡•…‰€™☺○♀♂♪♫◙↨☼►◄↕‼▬↑↓→←∟↔▲▼☻♥♦♣♠◘╚╔╩╦╠═╬¡░▒▓│┤╣║╗╝┐└┴┬├─┼▄█┌┘ı▀シ⌂~!@#_\$%\^&\*\(\)=\+\|\[\]\{\};\\:\",\<\>\?\/0-9]+/.test(this.value) && this.value.trim() !== ''){
+          $j(this).parent().removeClass('has-error');
+        }
+        else {
+          $j(this).parent().addClass('has-error');
+          valid = false;
+          topValues.push($j(this).parent().offset().top);
+          console.log('name');
+        }
+      });
+    }
+
+    if($j('form input[name*="address"]').length > 0){
+      $j('form input[name*="address"]').each(function(){
+        if(/^([a-zåäöüàáâãäåæçèéêëìíîïñòóôõöøùúûüÿA-ZÅÄÖÜÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜß0-9]{1}[a-zåäöüàáâãäåæçèéêëìíîïñòóôõöøùúûüÿA-ZÅÄÖÜÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜß0-9.,:\-/()& ]{1,})$/.test(this.value)){
+          $j(this).parent().removeClass('has-error');
+        }
+        else {
+          $j(this).parent().addClass('has-error');
+          valid = false;
+          topValues.push($j(this).parent().offset().top);
+          console.log('address');
+        }
+      });
+    }
+
+    if($j('form input[name*="city"]').length > 0){
+      $j('form input[name*="city"]').each(function(){
+        if(/^([a-zåäöüàáâãäåæçèéêëìíîïñòóôõöøùúûüÿA-ZÅÄÖÜÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜß0-9]{1}[a-zåäöüàáâãäåæçèéêëìíîïñòóôõöøùúûüÿA-ZÅÄÖÜÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜß0-9\- ]{1,})$/.test(this.value)){
+          $j(this).parent().removeClass('has-error');
+        }
+        else {
+          $j(this).parent().addClass('has-error');
+          valid = false;
+          topValues.push($j(this).parent().offset().top);
+          console.log('city');
+        }
+      });
+    }
+
+    if($j('form input[name*="phone"]').length > 0){
+      $j('form input[name*="phone"]').each(function(){
+        if(/^[0-9+ \-]{1,}$/.test(this.value)){
+          $j(this).parent().removeClass('has-error');
+        }
+        else {
+          $j(this).parent().addClass('has-error');
+          valid = false;
+          topValues.push($j(this).parent().offset().top);
+          console.log('phone');
+        }
+      });
+    }
+
+    if($j('form input[name="password2"]').length > 0){
+      $j('form input[name="password2"]').each(function(){
+        if(this.value === $j('form input[name="password"]').val()){
+          $j(this).parent().removeClass('has-error');
+        }
+        else {
+          $j(this).parent().addClass('has-error');
+          valid = false;
+          topValues.push($j(this).parent().offset().top);
+          console.log('password2');
+        }
+      });
+    }
+
+    if($j('form input[name="passwordCurrent"]').length > 0){
+      $j('form input[name="passwordCurrent"]').each(function() {
+        if(this.value.trim() !== '' ){
+          $j(this).parent().removeClass('has-error');
+        }
+        else {
+          $j(this).parent().addClass('has-error');
+          valid = false;
+          topValues.push($j(this).parent().offset().top);
+          console.log('passwordCurrent');
+        }
+      });
+    }
+
+    if($j('form input[name="companyname"]').length > 0){
+      $j('form input[name="companyname"]').each(function() {
+        if(/^([a-zåäöüàáâãäåæçèéêëìíîïñòóôõöøùúûüÿA-ZÅÄÖÜÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜß0-9]{1}[a-zåäöüàáâãäåæçèéêëìíîïñòóôõöøùúûüÿA-ZÅÄÖÜÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÑÒÓÔÕÖØÙÚÛÜß0-9.,?:\-/()&+– ]{1,})$/.test(this.value)){
+          $j(this).parent().removeClass('has-error');
+        }
+        else {
+          $j(this).parent().addClass('has-error');
+          valid = false;
+          topValues.push($j(this).parent().offset().top);
+          console.log('companyname');
+        }
+      });
+    }
+
+    if($j('form input[name*="company-korvlada-nbr"]').length > 0){
+      $j('form input[name*="company-korvlada-nbr"]').each(function() {
+        if(/^[0-9]{1,10000}$/.test(this.value) && this.value > 0){
+          $j(this).parent().removeClass('has-error');
+        }
+        else {
+          $j(this).parent().addClass('has-error');
+          valid = false;
+          topValues.push($j(this).parent().offset().top);
+          console.log('company-korvlada');
+        }
+      });
+    }
+
+    if($j('form input[name="user_login"]').length > 0){
+      $j('form input[name="user_login"]').each(function(){
+        if(!/[¤¢£¥¦§©ª«¬®¯°±²³µ¶¸¹º»¼½¾¿Þßþƒ†‡•…‰€™☺○♀♂♪♫◙↨☼►◄↕‼▬↑↓→←∟↔▲▼☻♥♦♣♠◘╚╔╩╦╠═╬¡░▒▓│┤╣║╗╝┐└┴┬├─┼▄█┌┘ı▀シ⌂~!@#_\$%\^&\*\(\)=\+\|\[\]\{\};\\:\",\<\>\?\/]+/.test(this.value) && this.value.trim() !== ''){
+          $j(this).parent().removeClass('has-error');
+        }
+        else {
+          $j(this).parent().addClass('has-error');
+          valid = false;
+          topValues.push($j(this).parent().offset().top);
+        }
+      });
+    }
+
+    if(!valid && topValues){
+      console.log(topValues);
+      console.log(Math.min.apply(Math, topValues));
+      $j("html, body").animate({ scrollTop: (Math.min.apply(Math, topValues) - 20) }, "fast");
+    }
+
+
+    return valid;
   }
 };

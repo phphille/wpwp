@@ -105,18 +105,18 @@ class JSON_API_Korvlador_Controller {
         }
       }
       if(
-      // preg_match("/^([a-zåäöüA-ZÅÄÖÜ0-9]{1}[a-zåäöüA-ZÅÄÖÜ0-9.,?:\-/()&+– ]{1,})$/", $query['company_name']) &&
-      // // checkOrgNbr($query['company_org-nbr']) &&
-      // preg_match("/^([a-zåäöüA-ZÅÄÖÜ0-9]{1}[a-zåäöüA-ZÅÄÖÜ0-9.,?:\-/()&+– ]{1,})$/", $query['company_address']) &&
-      // preg_match("/^([a-zåäöüA-ZÅÄÖÜ0-9]{1}[a-zåäöüA-ZÅÄÖÜ \-]{1,})$/", $query['company_city']) &&
-      // preg_match("/^[0-9]{3}[ ]?[0-9]{2}$/", $query['company_postalcode']) &&
-      // is_email($query['company_contactMail']) &&
-      // preg_match("/^([a-zåäöA-ZÅÄÖ]{1}|[a-zåäöA-ZÅÄÖ]{1}[a-zåäöA-ZÅÄÖ ]{1,})$/", $query['company_contactFirstname']) &&
-      // preg_match("/^([a-zåäöA-ZÅÄÖ]{1}|[a-zåäöA-ZÅÄÖ]{1}[a-zåäöA-ZÅÄÖ ]{1,})$/", $query['company_contactLastname']) &&
-      // preg_match("/^[0-9+ \-]{1,}$/", $query['company_contactPhone']) &&
-      // preg_match("/^([a-zåäöA-ZÅÄÖ]{1}|[a-zåäöA-ZÅÄÖ]{1}[a-zåäöA-ZÅÄÖ ]{1,})$/", $query['company_deliveryFirstname']) &&
-      // preg_match("/^([a-zåäöA-ZÅÄÖ]{1}|[a-zåäöA-ZÅÄÖ]{1}[a-zåäöA-ZÅÄÖ ]{1,})$/", $query['company_deliveryLastname']) &&
-      // preg_match("/^[0-9+ \-]{1,}$/", $query['company_deliveryPhone']) &&
+      preg_match("/^([a-zåäöüA-ZÅÄÖÜ0-9]{1}[a-zåäöüA-ZÅÄÖÜ0-9.,?:\-/()&+– ]{1,})$/", $query['company_name']) &&
+      // checkOrgNbr($query['company_org-nbr']) &&
+      preg_match("/^([a-zåäöüA-ZÅÄÖÜ0-9]{1}[a-zåäöüA-ZÅÄÖÜ0-9.,?:\-/()&+– ]{1,})$/", $query['company_address']) &&
+      preg_match("/^([a-zåäöüA-ZÅÄÖÜ0-9]{1}[a-zåäöüA-ZÅÄÖÜ \-]{1,})$/", $query['company_city']) &&
+      preg_match("/^[0-9]{3}[ ]?[0-9]{2}$/", $query['company_postalcode']) &&
+      is_email($query['company_contactMail']) &&
+      preg_match("/^([a-zåäöA-ZÅÄÖ]{1}|[a-zåäöA-ZÅÄÖ]{1}[a-zåäöA-ZÅÄÖ ]{1,})$/", $query['company_contactFirstname']) &&
+      preg_match("/^([a-zåäöA-ZÅÄÖ]{1}|[a-zåäöA-ZÅÄÖ]{1}[a-zåäöA-ZÅÄÖ ]{1,})$/", $query['company_contactLastname']) &&
+      preg_match("/^[0-9+ \-]{1,}$/", $query['company_contactPhone']) &&
+      preg_match("/^([a-zåäöA-ZÅÄÖ]{1}|[a-zåäöA-ZÅÄÖ]{1}[a-zåäöA-ZÅÄÖ ]{1,})$/", $query['company_deliveryFirstname']) &&
+      preg_match("/^([a-zåäöA-ZÅÄÖ]{1}|[a-zåäöA-ZÅÄÖ]{1}[a-zåäöA-ZÅÄÖ ]{1,})$/", $query['company_deliveryLastname']) &&
+      preg_match("/^[0-9+ \-]{1,}$/", $query['company_deliveryPhone']) &&
       get_current_user_role() == 'salesperson' &&
       $korvladorAreOk
       ){
@@ -129,7 +129,7 @@ class JSON_API_Korvlador_Controller {
           if($post_to_update->post_author == get_current_user_id()){
             $post = array(
             'ID'           => $post_to_update->ID,
-            'post_title' => wp_strip_all_tags( $query['company_name'] ),
+            'post_title' => wp_strip_all_tags( $query['companyname'] ),
             'post_type' => 'companies',  // Use a custom post type if you want to
             'post_author' => get_current_user_id()
             );
@@ -137,7 +137,7 @@ class JSON_API_Korvlador_Controller {
         }
         else {
           $post = array(
-          'post_title' => wp_strip_all_tags( $query['company_name'] ),
+          'post_title' => wp_strip_all_tags( $query['companyname'] ),
           'post_type' => 'companies',
           'post_author' => get_current_user_id()
           );
@@ -146,15 +146,15 @@ class JSON_API_Korvlador_Controller {
 
         $postid = wp_insert_post($post, true);
         if(is_numeric($postid)){
-          update_post_meta($postid, 'companyOrgNbr', $query['company_orgNbr']);
-          update_post_meta($postid, 'companyAddress', $query['company_address']);
-          update_post_meta($postid, 'companyCity', $query['company_city']);
-          update_post_meta($postid, 'companyPostalcode', $query['company_postalcode']);
-          update_post_meta($postid, 'companyMail', $query['company_mail']);
-          update_post_meta($postid, 'companyPhone', $query['company_phone']);
-          update_post_meta($postid, 'companyRecipientName', $query['company_recipientName']);
-          update_post_meta($postid, 'companyRecipientMail', $query['company_recipientMail']);
-          update_post_meta($postid, 'companyRecipientPhone', $query['company_recipientPhone']);
+          update_post_meta($postid, 'company_orgnbr', $query['company_orgnbr']);
+          update_post_meta($postid, 'company_address', $query['company_address']);
+          update_post_meta($postid, 'company_city', $query['company_city']);
+          update_post_meta($postid, 'company_postalcode', $query['company_postalcode']);
+          update_post_meta($postid, 'company_email', $query['company_email']);
+          update_post_meta($postid, 'company_phone', $query['company_phone']);
+          update_post_meta($postid, 'company_recipient_name', $query['company_recipient_name']);
+          update_post_meta($postid, 'company_recipient_email', $query['company_recipient_email']);
+          update_post_meta($postid, 'company_recipient_phone', $query['company_recipient_phone']);
           foreach ($query as $key => $value ) {
             if(strpos($key, 'company-korvlada-nbr') !== false){
               $words = explode('-', $key);
@@ -173,6 +173,9 @@ class JSON_API_Korvlador_Controller {
         }
 
         return $postid;
+      }
+      else {
+        return false;
       }
     }
   }
@@ -194,8 +197,8 @@ class JSON_API_Korvlador_Controller {
       $company = get_post($query['id']);
       if($company->post_author == get_current_user_id()){
         $postMeta = get_post_meta($company->ID);
-        $postMeta['companyName'] = $company->post_title;
-        $postMeta['companyKorven'] = $company->ID;
+        $postMeta['companyname'] = $company->post_title;
+        $postMeta['company_korven'] = $company->ID;
         $returnVal = json_encode($postMeta);
       }
     }

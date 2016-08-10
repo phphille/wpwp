@@ -18,6 +18,10 @@ var updateSoldKorvs = {
           data = self.getNiceData($j(this).parent().serializeArray());
           data.add = this.name === 'add' ? true : false;
           self.postData(data, 'korvlador', 'update_sold_korvs', self.updatePrivateCustomerList);
+          $j(this).parent().removeClass('has-error');
+        }
+        else {
+          $j(this).parent().addClass('has-error');
         }
       });
     }
@@ -86,9 +90,12 @@ var updateSoldKorvs = {
           // console.dir(this.form.querySelector('select'));
           var html = '<div class="panel panel-default">'+
                         '<div class="panel-body">'+
+                          '<div class="input-group">'+
                           '<input class="" type="text" disabled name="" value="'+selectElement.options[selectElement.selectedIndex].text+'">'+
-                          '<input class="company-korvlada-amount" type="number" name="company-korvlada-nbr-'+(selectElement.value)+'" value="'+amountElement.value+'"> st.'+
+                          '<input class="company-korvlada-amount" type="number" min="1" name="company-korvlada-nbr-'+(selectElement.value)+'" value="'+amountElement.value+'"> st.'+
                           '<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>'+
+                          '<span>Får bara innehålla siffror och vara ett positivt värde</span>'+
+                          '</div>'+
                         '</div>'+
                       '</div>';
           $j(html).appendTo('.new-company-korvlade-list');
@@ -125,8 +132,14 @@ var updateSoldKorvs = {
       var self = this;
       $j('.company-customer-form input[name="do-company"]').on('click', function(e){
         e.preventDefault();
-        data = self.getNiceData($j(this).parent().serializeArray());
-        self.postData(data, 'korvlador', 'save_company', self.checkSaveCompany);
+        e.stopPropagation();
+        if(!formvalidation.formIsValid()){
+          return false;
+        }
+        else {
+          data = self.getNiceData($j(this).parent().serializeArray());
+          self.postData(data, 'korvlador', 'save_company', self.checkSaveCompany);
+        }
       });
     }
   },

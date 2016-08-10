@@ -13,3 +13,14 @@
   @extend .btn;
   @extend .btn-default;
 }
+
+.input-group{
+  span:last-of-type{
+    display: none;
+  }
+  &.has-error{
+    span:last-of-type{
+      display: block;
+    }
+  }
+}

@@ -50,7 +50,7 @@ function getUsersCompanies($loggedInUserId, $products){
         $companies .= '<p>Organisationsnummer</p>';
         $companies .= '<p>'.$companyMeta['companyOrgNbr'][0].'</p>';
         $companies .= '<p>Epost</p>';
-        $companies .= '<p>'.$companyMeta['companyMail'][0].'</p>';
+        $companies .= '<p>'.$companyMeta['companyEmail'][0].'</p>';
         $companies .= '<p>Telefonnummer</p>';
         $companies .= '<p>'.$companyMeta['companyPhone'][0].'</p>';
         $companies .= '
@@ -119,18 +119,21 @@ $products = [];
 
       <form class="private-customer-form" action="" method="post">
         <?php wp_nonce_field( 'update_sold_korvs','nya-korvar' ); ?>
-        <select name="korvlada">
-          <option value="" disabled selected>Välj Produkt</option>
-          <?php
-            foreach ($query->posts as $product) {
-              $products[] = $product;
-              echo '<option value="'.$product->ID.'">'.$product->post_title.'</option>';
-            }
-          ?>
-        </select>
-        <input name="nbrProducts" type="number" value="" disabled>
-        <input class="btn btn-default updateSoldKorv" name="add" type="submit" value="Lägg till" disabled>
-        <input class="btn btn-default updateSoldKorv" name="remove" type="submit" value="Ta bort" disabled>
+        <div class="input-group">
+          <select name="korvlada">
+            <option value="" disabled selected>Välj Produkt</option>
+            <?php
+              foreach ($query->posts as $product) {
+                $products[] = $product;
+                echo '<option value="'.$product->ID.'">'.$product->post_title.'</option>';
+              }
+            ?>
+          </select>
+          <input name="nbrProducts" type="number" value="" min="1" disabled>
+          <input class="btn btn-default updateSoldKorv" name="add" type="submit" value="Lägg till" disabled>
+          <input class="btn btn-default updateSoldKorv" name="remove" type="submit" value="Ta bort" disabled>
+          <span>Får bara innehålla siffror och vara ett positivt värde</span>
+        </div>
       </form>
 
     <?php else: ?>
@@ -148,15 +151,17 @@ $products = [];
         <?php //wp_nonce_field( 'add_new_company','ny-stor-korv' );  ?>
 
         <input type="hidden" name="company_korven" value="">
+
         <div class="input-group">
-          <label for="">Företagsnamn</label>
-          <input type="text" name="company_name" class="form-control" value="">
+          <label class="control-label">Företagsnamn *</label>
+          <input type="text" name="companyname" class="form-control" value="" required>
+          <span class="">Företagsnamnet innehåller icke tillåtna tecken</span>
         </div>
 
 
         <br><br>
         <div class="input-group">
-          <label>Lägg till korvlådor</label>
+          <label>Lägg till korvlådor *</label>
           <br>
           <!-- <hr> -->
           <select name="company-korvlada">
@@ -179,43 +184,52 @@ $products = [];
         <label>Fakturauppgifter</label>
         <br>
         <div class="input-group">
-          <label for="">Gatuadress</label>
-          <input type="text" name="company_address" class="form-control" value="">
+          <label class="control-label">Gatuadress *</label>
+          <input type="text" name="company_address" class="form-control" value="" required>
+          <span>Gatuadressen innehåller icke tillåtna tecken</span>
         </div>
         <div class="input-group">
-          <label for="">Postnummer</label>
-          <input type="text" name="company_postalcode" class="form-control" value="">
+          <label class="control-label">Postnummer *</label>
+          <input type="text" name="company_postalcode" class="form-control" value="" required>
+          <span>Postnummeret är inte korrekt</span>
         </div>
         <div class="input-group">
-          <label for="">Stad</label>
-          <input type="text" name="company_city" class="form-control" value="">
+          <label class="control-label">Stad *</label>
+          <input type="text" name="company_city" class="form-control" value="" required>
+          <span>Stadsnamnet innehåller icke tillåtna tecken</span>
         </div>
         <div class="input-group">
-          <label for="">Organistationsnummer</label>
-          <input type="text" name="company_orgNbr" class="form-control" value="">
+          <label class="control-label">Organistationsnummer *</label>
+          <input type="text" name="company_orgnbr" class="form-control" value="" required>
+          <span>Organistationsnummeret är inte korrekt</span>
         </div>
         <div class="input-group">
-          <label for="">E-post</label>
-          <input type="text" name="company_mail" class="form-control" value="">
+          <label class="control-label">E-post *</label>
+          <input type="text" name="company_email" class="form-control" value="" required>
+          <span>E-postadressen är inte korrekt</span>
         </div>
         <div class="input-group">
-          <label for="">Telefon</label>
-          <input type="text" name="company_phone" class="form-control" value="">
+          <label class="control-label">Telefon *</label>
+          <input type="text" name="company_phone" class="form-control" value="" required>
+          <span>Telefonnummret innehåller icke tillåtna tecken</span>
         </div>
 
         <label>Mottagarens kontaktuppgifter</label>
         <br>
         <div class="input-group">
-          <label for="">Namn</label>
-          <input type="text" name="company_recipientName" class="form-control" value="">
+          <label class="control-label">Namn *</label>
+          <input type="text" name="company_recipient_name" class="form-control" value="" required>
+          <span>Namnet innehåller icke tillåtna tecken</span>
         </div>
         <div class="input-group">
-          <label for="">E-post</label>
-          <input type="text" name="company_recipientMail" class="form-control" value="">
+          <label class="control-label">E-post *</label>
+          <input type="text" name="company_recipient_email" class="form-control" value="" required>
+          <span>E-postadressen är inte korrekt</span>
         </div>
         <div class="input-group">
-          <label for="">Telefon</label>
-          <input type="text" name="company_recipientPhone" class="form-control" value="">
+          <label class="control-label">Telefon *</label>
+          <input type="text" name="company_recipient_phone" class="form-control" value="" required>
+          <span>Telefonnummret innehåller icke tillåtna tecken</span>
         </div>
 
 
