@@ -124,7 +124,7 @@ function create_user_form($updateId) {
 
       <div class="form-group">
         <label for="">Postnummer</label>
-        <input type="text" class="form-control" name="zip" value="'.($updateId != '' ? get_user_meta($userToUpdate->ID, 'zip', true) : '').'" placeholder="Postnummer">
+        <input type="text" class="form-control" name="postalcode" value="'.($updateId != '' ? get_user_meta($userToUpdate->ID, 'zip', true) : '').'" placeholder="Postnummer">
       </div>
 
       <div class="form-group">
@@ -154,76 +154,3 @@ function create_user_form($updateId) {
   return $form;
 }
 add_shortcode('getCreateFormUser', 'create_user_form');
-
-
-
-
-
-
-
-
-
-
-function update_logged_in_user_profile() {
-
-  $userInfo = get_userdata( get_current_user_id() );
-
-  $form = '<form class="form_account" action="" method="post">';
-
-  // $form .= get_current_user_role() == 'manager' ? '<input type="hidden" name="prinskorv" value="lightbulb">' : '';
-
-
-  $form .= '
-
-    <div class="input-group">
-      <label for="">E-postadress</label>
-      <input type="text" name="user_email" class="form-control" value="'.$userInfo->user_email.'">
-    </div>
-
-    <div class="input-group">
-    <label for="">Förnamn</label>
-    <input type="text" name="first_name" class="form-control" value="'.$userInfo->first_name.'">
-    </div>
-    <div class="input-group">
-    <label for="">Efternamn</label>
-    <input type="text" name="last_name" class="form-control" value="'.$userInfo->last_name.'">
-    </div>
-    <div class="input-group">
-    <label for="">Adress</label>
-    <input type="text" name="address" class="form-control" value="'.get_user_meta($userInfo->ID, 'address', true).'">
-    </div>
-    <div class="input-group">
-    <label for="">Postnummer</label>
-    <input type="text" name="zip" class="form-control" value="'.get_user_meta($userInfo->ID, 'zip', true).'">
-    </div>
-    <div class="input-group">
-    <label for="">Stad</label>
-    <input type="text" name="city" class="form-control" value="'.get_user_meta($userInfo->ID, 'city', true).'">
-    </div>
-    <div class="input-group">
-    <label for="">Telefonnummer</label>
-    <input type="text" name="phone" class="form-control" value="'.get_user_meta($userInfo->ID, 'phone', true).'">
-    </div>
-
-    <div class="input-group">
-    <label for="">Lösenord</label>
-    <input type="password" name="password" class="form-control" value="">
-    </div>
-    <div class="input-group">
-    <label for="">Repetera lösenord</label>
-    <input type="password" name="password2" class="form-control" value="">
-    </div>
-
-
-    <div class="input-group">
-    <label for="">Nuvarande lösenord</label>
-    <input type="password" name="passwordCurrent" class="form-control" value="">
-    </div>
-
-
-    <input type="submit" value="Uppdatera" class="doUpdateLoggedInUser">
-  </form>';
-
-  echo $form;
-}
-add_shortcode('getUpdateLoggedInUserForm', 'update_logged_in_user_profile');

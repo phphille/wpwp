@@ -116,6 +116,7 @@ $j(document).ready(function(){
   user.init();
   excel.init();
   updateSoldKorvs.init();
+  formvalidation.init();
   // plugins.init();
   // console.log(plugins);
 

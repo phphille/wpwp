@@ -52,7 +52,7 @@ class JSON_API_User_Controller {
     $last_name        = sanitize_text_field($query['last_name']);
     $_phone           = sanitize_text_field($query['phone']);
     $_address         = sanitize_text_field($query['address']);
-    $_zip             = sanitize_text_field($query['zip']);
+    $_zip             = sanitize_text_field($query['postalcode']);
     $_city            = sanitize_text_field($query['city']);
     $_team            = sanitize_text_field($query['team']);
     $role             = sanitize_text_field($query['prinskorv']) == 'tjock' || sanitize_text_field($query['prinskorv']) == 'smal' ? sanitize_text_field($query['prinskorv']) : false;
@@ -169,7 +169,7 @@ class JSON_API_User_Controller {
     $last_name        = sanitize_text_field($query['last_name']);
     $_phone           = sanitize_text_field($query['phone']);
     $_address         = sanitize_text_field($query['address']);
-    $_zip             = sanitize_text_field($query['zip']);
+    $_zip             = sanitize_text_field($query['postalcode']);
     $_city            = sanitize_text_field($query['city']);
     $_team            = sanitize_text_field($query['team']);
     $role             = sanitize_text_field($query['prinskorv']);
@@ -197,7 +197,7 @@ class JSON_API_User_Controller {
 
       update_user_meta( $userIdToUpdate,'phone',  $_phone  );
       update_user_meta( $userIdToUpdate,'address', $_address );
-      update_user_meta( $userIdToUpdate,'zip', $_zip );
+      update_user_meta( $userIdToUpdate,'postalcode', $_zip );
       update_user_meta( $userIdToUpdate,'city', $_city );
       update_user_meta( $userIdToUpdate,'team',  $_team  );
 
@@ -318,7 +318,7 @@ class JSON_API_User_Controller {
     $last_name        = sanitize_text_field($query['last_name']);
     $_phone           = sanitize_text_field($query['phone']);
     $_address         = sanitize_text_field($query['address']);
-    $_zip             = sanitize_text_field($query['zip']);
+    $_zip             = sanitize_text_field($query['postalcode']);
     $_city            = sanitize_text_field($query['city']);
 
 
@@ -341,7 +341,7 @@ class JSON_API_User_Controller {
     if ( ! is_wp_error( $updatedUserID ) ) {
       update_user_meta( $updatedUserID,'phone',  $_phone  );
       update_user_meta( $updatedUserID,'address', $_address );
-      update_user_meta( $updatedUserID,'zip', $_zip );
+      update_user_meta( $updatedUserID,'postalcode', $_zip );
       update_user_meta( $updatedUserID,'city', $_city );
       update_user_meta( $updatedUserID,'team',  $_team  );
       return true;
@@ -422,22 +422,6 @@ class JSON_API_User_Controller {
     else {
       return false;
     }
-
-  }
-
-
-  function update_sold_korvs(){
-    global $json_api;
-    $url = parse_url($_SERVER['REQUEST_URI']);
-    $defaults = array();
-    $query = wp_parse_args($url['query']);
-    $nonce_id = $json_api->get_nonce_id('user', 'update_sold_korvs');
-
-    if (!wp_verify_nonce($json_api->query->nonce, $nonce_id) || get_current_user_role() != 'salesperson') {
-      $json_api->error("Your 'nonce' value was incorrect. Use the 'get_nonce' API method.");
-    }
-
-    return $query;
 
   }
 
