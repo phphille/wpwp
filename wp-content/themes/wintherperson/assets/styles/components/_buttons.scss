@@ -1,6 +1,9 @@
 .create-user-manually{
   width: 100%;
   padding: 10px 10px;
+	background: grey;
+	border-color: grey;
+	margin-bottom: 35px;
 }
 
 .fileUpload {
@@ -8,8 +11,24 @@
   overflow: hidden;
   width: 100%;
   padding: 10px 10px;
-  margin-bottom: 50px;
+	background: grey;
+	border-color: grey;
+	margin-bottom: 10px;
 }
+
+.fileUpload:hover, .create-user-manually:hover {
+	background:grey;
+	opacity: 0.8;
+	border-color: grey;
+}
+
+input.uploadexcel_btn {
+	width:100%;
+	padding:10px;
+}
+
+
+
 .fileUpload input.upload {
     position: absolute;
     top: 0;

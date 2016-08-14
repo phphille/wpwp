@@ -28,11 +28,22 @@
   <div class="container">
     <nav class="nav-primary">
       <?php
-        $args = [
+        $visitor_menu_args = [
           'theme_location'    => 'primary_navigation',
           'depth'             => 2,
           'container'         => 'div',
           'container_class'   => 'collapse navbar-collapse',
+          'container_id'      => 'bs-example-navbar-collapse-1',
+          'menu_class'        => 'nav navbar-nav',
+          'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
+          'walker'            => new wp_bootstrap_navwalker()
+          ];
+
+		$loggedin_menu_args = [
+          'theme_location'    => 'menu_loggedin',
+          'depth'             => 2,
+          'container'         => 'div',
+          'container_class'   => 'collapse navbar-collapse navbar-loggedin',
           'container_id'      => 'bs-example-navbar-collapse-1',
           'menu_class'        => 'nav navbar-nav',
           'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
@@ -67,32 +78,47 @@
 					break;
 			}
     }
-			?>
-
+		$header_loggedin = '';
+		if (is_user_logged_in()):
+			$header_loggedin = 'loggedin';
+		endif; 
+			
+			
+		$social_header = 
+		'<div class="social_icons">
+			<a href="mailto:info@wpknackwurst.se"><img src="'.$social_at.'" alt="email"></a>
+							<a href="http://www.facebook.com/pages/Korvlådan/1376704122619120"><img src="'.$social_fb.'" alt="facebook"></a>	
+						</div>
+		'; ?>
+			
       <nav class="navbar navbar-default" role="navigation">
       <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
 					<div id="header-logo" class="visible-sm visible-xs header-logo_mobile">
 						<a href="#"><img class="img-responsive" src="<?php echo $header_logo; ?>" alt="wp logo"></a>
-				</div>
+						<?php if(!is_user_logged_in()): ?>
+							<a href="login" class="login login-mobile" id="login_btn">WP kundportal</a>
+						<?php else: ?>
+							<a href="<?php echo wp_logout_url(); ?>">Logga ut</a>
+						<?php endif; ?>
+					</div>
 
-					<div id="header-logo" class="hidden-sm hidden-xs header-logo_nonmobile">
-						<div class="login_actions">
-							<?php echo $loggedInmMenu; ?>
-							<?php if($loggedInmMenu != ''): ?>
-								<a href="<?php echo wp_logout_url(); ?>">Logga ut</a>
-							<?php else: ?>
-								<a href="login" class="login" id="login_btn">Logga In</a>
-							<?php endif; ?>
-						</div>
+					<div id="header-logo" class="hidden-sm hidden-xs header-logo_nonmobile <?php echo $header_loggedin; ?>">
+								<div class="social_corner">
+									<div class="login_actions">
+										<?php if(!is_user_logged_in()): ?>
+											<a href="login" class="login" id="login_btn">WP kundportal</a>
+										<?php else: ?>
+											<a href="<?php echo wp_logout_url(); ?>" class="login">Logga ut</a>
+										<?php endif; ?>
+									</div>
+									<?php echo $social_header; ?>
+								</div>
 						
-						<div class="social_icons">
-							<a href="mailto:info@wpknackwurst.se"><img src="<?php echo $social_at; ?>" alt="email"></a>
-							<a href="http://www.facebook.com/pages/Korvlådan/1376704122619120"><img src="<?php echo $social_fb; ?>" alt="facebook"></a>	
-						</div>
-						<a href="#"><img class="img-responsive" src="<?php echo $header_logo; ?>" alt="wp logo"></a>
-				</div>
+						<a href="#"><img class="img-responsive <?php echo $header_loggedin; ?>" src="<?php echo $header_logo; ?>" alt="wp logo"></a>
+					</div>
+					
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
             <span class="sr-only">Toggle navigation</span>
             <span class="icon-bar"></span>
@@ -100,8 +126,12 @@
             <span class="icon-bar"></span>
           </button>
         </div>
-
-          <?php wp_nav_menu($args);?>
+				
+			<?php if(!is_user_logged_in()): ?>
+          <?php wp_nav_menu($visitor_menu_args);
+			else: ?>
+					<?php wp_nav_menu($loggedin_menu_args);
+			endif; ?>
       </div>
       </nav>
     </nav>
